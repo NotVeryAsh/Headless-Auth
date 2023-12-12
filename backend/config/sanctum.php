@@ -46,7 +46,7 @@ return [
     |
     */
 
-    'expiration' => null,
+    'expiration' => '1440',
 
     /*
     |--------------------------------------------------------------------------
@@ -79,5 +79,16 @@ return [
         'encrypt_cookies' => App\Http\Middleware\EncryptCookies::class,
         'verify_csrf_token' => App\Http\Middleware\VerifyCsrfToken::class,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Token Name
+    |--------------------------------------------------------------------------
+    |
+    | When using createToken on a given user, a name parameter is required.
+    |
+    */
+
+    'token_name' => env('SANCTUM_TOKEN_NAME', 'SANCTUM_PAT'),
 
 ];

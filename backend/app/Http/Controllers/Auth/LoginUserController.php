@@ -31,11 +31,13 @@ class LoginUserController extends Controller
             ], 422);
         }
 
-        $token = $request->user()->createToken(config('sanctum.token_name'));
+        $user = Auth::user();
+
+        $token = $user->createToken(config('sanctum.token_name'));
 
         return response()->json([
             'message' => 'User successfully authenticated.',
-            'user' => new UserResource(Auth::user()),
+            'user' => new UserResource($user),
             'token' => $token->plainTextToken,
         ], 200);
     }

@@ -1,59 +1,18 @@
-import getToken from '@/lib/auth';
+export default async function sendRequest(method: string, url: string, body?: any, cacheTime: number = 3600) {
 
-// function to make requests with method, url, data
-async function sendRequest(method: string, url: string, body?: any, requireAuth: boolean = true) {
-
-    const token = await getAuthToken();
-    const headers = setHeaders(requireAuth, token);
-
-    if(method === 'GET') {
-        url += getQueryParamsFromBody(body);
-        body = null;
-    }
+    url = `${process.env.LARAVEL_BACKEND_API}${url}`
 
     const response = await fetch(url, {
         method,
-        headers: headers,
-        credentials: 'include',
+        headers: [
+            ['Accept', 'application/json'],
+            ['Content-Type', 'application/json'],
+        ],
         body: body && JSON.stringify(body),
+        next: {
+            revalidate: cacheTime
+        }
     });
 
     return response.json()
-}
-
-function getQueryParamsFromBody(body: any)
-{
-    let query = '?';
-    for(let key in body) {
-        query += `&${key}=${body[key]}`;
-    }
-
-    return query
-}
-
-function setHeaders(requireAuth: boolean = true, token?: string)
-{
-    const headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-    }
-
-    if(requireAuth) {
-        headers['Authorization'] = 'Bearer ' + token;
-    }
-
-    return headers;
-}
-
-async function getAuthToken(requireAuth: boolean = true)
-{
-    let token = null;
-
-    if(requireAuth) {
-        // Get new token for the user or redirect to login page
-        const data = await getToken();
-        token = data.token;
-    }
-
-    return token;
 }

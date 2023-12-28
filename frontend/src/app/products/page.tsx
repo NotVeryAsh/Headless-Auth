@@ -3,7 +3,7 @@ import Card from "@/components/Card";
 import sendRequest from "@/lib/request";
 
 export default async function ProductsHomePage() {
-    const response = await sendRequest('GET', '/products');
+    const response = await sendRequest('GET', '/api/products');
     const products = response.products;
     return (
         <>

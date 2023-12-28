@@ -11,7 +11,8 @@ export default async function sendRequest(method: string, url: string, body?: an
         body: body && JSON.stringify(body),
         next: {
             revalidate: cacheTime
-        }
+        },
+        credentials: 'include'
     });
 
     return response.json()

@@ -10,16 +10,16 @@ export const metadata: Metadata = {
   description: 'A simple headless authentication app',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
+export default function RootLayout(props: {
+  children: React.ReactNode,
+  backbutton: React.ReactNode
 }) {
   return (
     <html lang="en">
       <body className={montserrat.className + " flex min-h-screen flex-col items-center justify-between p-24 bg-slate-100"}>
         <main className="flex flex-col items-center justify-center space-y-10 w-full">
-          {children}
+          {props.backbutton}
+          {props.children}
         </main>
       </body>
     </html>

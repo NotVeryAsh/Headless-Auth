@@ -5,7 +5,7 @@ import {useRouter} from 'next/navigation'
 import Button from "@/components/Button";
 import { usePathname } from 'next/navigation'
 
-export default function Backbutton() {
+export default function BackButton() {
 
     const router = useRouter();
     const pathName = usePathname();

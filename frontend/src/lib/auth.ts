@@ -9,6 +9,13 @@ export default async function login(formData: FormData) {
         password: formData.get('password')
     }
 
-    sendRequest('POST', '/login', credentials, 0)
+    const response = sendRequest('POST', '/login', credentials, 0)
 
+    // do the request with data
+    // check for errors
+    // display errors if there are any
+
+    // if no errors
+    // get token from headers
+    // set token in headers
 }

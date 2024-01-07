@@ -4,7 +4,14 @@ import sendRequest from "@/lib/request";
 
 export default async function ProductsHomePage() {
     const response = await sendRequest('GET', '/api/products');
-    const products = response.products;
+
+    if(response.status !== 200) {
+        throw new Error('Failed to fetch products');
+    }
+
+    const json = await response.json();
+    const products = json.products;
+
     return (
         <>
             <h1 className="text-6xl font-bold text-slate-900">Products</h1>

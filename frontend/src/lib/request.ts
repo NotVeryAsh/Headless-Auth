@@ -2,18 +2,16 @@ export default async function sendRequest(method: string, url: string, body?: an
 
     url = `${process.env.NEXT_PUBLIC_LARAVEL_BACKEND_API}${url}`
 
-    const response = await fetch(url, {
+    return await fetch(url, {
         method,
-        headers: [
-            ['Accept', 'application/json'],
-            ['Content-Type', 'application/json'],
-        ],
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
         body: body && JSON.stringify(body),
         next: {
             revalidate: cacheTime
         },
         credentials: 'include'
     });
-
-    return response.json()
 }

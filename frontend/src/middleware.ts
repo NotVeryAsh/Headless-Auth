@@ -8,6 +8,11 @@ export default async function middleware(request: NextRequest) {
     const authenticated = await getAuthToken() !== undefined
 
     // Check if user is trying to access dashboard page whilst not logged in
+    if (isPage(request, '/login') && authenticated) {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+
+    // Check if user is trying to access dashboard page whilst not logged in
     if (isPage(request, '/dashboard') && !authenticated) {
         return NextResponse.redirect(new URL('/login', request.url))
     }

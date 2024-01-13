@@ -14,7 +14,7 @@ export default async function storeAuthToken(token: string) {
 }
 
 export async function getAuthToken() {
-    return cookies().get(process.env.NEXT_PUBLIC_SANCTUM_TOKEN_NAME);
+    return cookies().get(process.env.NEXT_PUBLIC_SANCTUM_TOKEN_NAME)?.value;
 }
 
 export async function redirectTo(redirectString: string) {

@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import {getAuthToken} from "@/lib/auth";
+import {cookies} from "next/headers";
 
-export function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
 
-    const authenticated = getAuthToken() !== undefined
+    const authenticated = await getAuthToken() !== undefined
 
     // Check if user is trying to access dashboard page whilst not logged in
     if (isPage(request, '/dashboard') && !authenticated) {

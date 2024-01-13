@@ -1,10 +1,11 @@
 'use client'
 
-import {ReactNode, useState} from "react";
+import {Dispatch, ReactNode, SetStateAction, useState} from "react";
 import Button from "@/components/Button";
 import sendRequest from "@/lib/request";
+import storeAuthToken, {redirectTo} from "@/lib/auth";
 
-async function handleSubmit(event: any, method: string, action: string, isSubmitting: any, setIsSubmitting: any, errors, setErrors) {
+async function handleSubmit(event: any, method: string, action: string, isSubmitting: any, setIsSubmitting: any, errors: never[], setErrors: Dispatch<SetStateAction<never[]>>) {
 
     setErrors([]);
 
@@ -17,7 +18,6 @@ async function handleSubmit(event: any, method: string, action: string, isSubmit
     event.preventDefault();
     setIsSubmitting(true);
 
-    // get the form from the event
     const form = event.target
 
     // get all data from form
@@ -26,6 +26,7 @@ async function handleSubmit(event: any, method: string, action: string, isSubmit
 
     const response = await sendRequest(method, action, data);
 
+    // Allow the form to be submitted again
     setIsSubmitting(false);
 
     return response;
@@ -39,22 +40,26 @@ async function loginUser(response: Response | undefined, name: string, errors: a
         return;
     }
 
+    // Get the data from the response
     const data = await response?.json();
 
-    // If response was not successful or has errors
     if(data.errors) {
+
+        // Get the element in which errors will be displayed
         const errorElement = document.getElementById(name + "_form_errors");
         if(!errorElement) {
             throw new Error('Form is missing error element');
         }
 
-        let errorMessages = [];
+        // Push all of the errors into the array and set them in the errors variable
 
-        const errorArrays = Object.values(data.errors)
+        let errorMessages: string[]  = [];
 
-        errorArrays.map(errorArrays => {
-            errorArrays.map(errorMessage => {
-                errorMessages.push(errorMessage)
+        const errorArrays: any[] = Object.values(data.errors)
+
+        errorArrays.map(function(errorArrays: any[]) {
+            errorArrays.map(function (errorMessage: string) {
+                return errorMessages.push(errorMessage);
             })
         })
 
@@ -64,10 +69,19 @@ async function loginUser(response: Response | undefined, name: string, errors: a
         ])
 
         errorMessages = []
+
+        return;
+    }
+
+    if(response.status === 200) {
+
+        await storeAuthToken(data.token)
+
+        await redirectTo('dashboard')
     }
 }
 
-function LoginForm({method, action, buttonText, name, children}: {method: string, action: string, buttonText?: string, name: string, children?: ReactNode}) {
+function LoginForm({method, action, name="login", buttonText, children}: {method: string, action: string, name?: string, buttonText?: string, children?: ReactNode}) {
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [errors, setErrors] = useState([])

@@ -24,10 +24,15 @@ class LoginUserController extends Controller
         // Auth failed - we have already established that a user with the provided email exists
         if (! $authIsSuccessful) {
 
+            $message = 'Password is incorrect. Try again or click "Forgot Password" to reset your password.';
+
             return response()->json([
                 'errors' => [
-                    'password' => 'Password is incorrect. Try again or click "Forgot Password" to reset your password.',
+                    'password' => [
+                        $message
+                    ]
                 ],
+                'message' => $message
             ], 422);
         }
 

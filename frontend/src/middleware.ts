@@ -1,18 +1,17 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import {getAuthToken} from "@/lib/auth";
 
 export function middleware(request: NextRequest) {
 
-    const cookies = request.cookies
-    const authenticated = cookies.has(process.env.SANCTUM_TOKEN_NAME)
-
-    // Check if user is trying to access products page whilst not logged in
-    // if (request.nextUrl.pathname.startsWith('/products') && !authenticated) {
-    //     return NextResponse.redirect(new URL('/login', request.url))
-    // }
+    const authenticated = getAuthToken() !== undefined
 
     // Check if user is trying to access dashboard page whilst not logged in
-    if (request.nextUrl.pathname.startsWith('/dashboard') && !authenticated) {
+    if (isPage(request, '/dashboard') && !authenticated) {
         return NextResponse.redirect(new URL('/login', request.url))
     }
+}
+
+function isPage(request: NextRequest, page: string) {
+    return request.nextUrl.pathname.startsWith(page)
 }

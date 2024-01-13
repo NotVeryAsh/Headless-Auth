@@ -1,21 +1,22 @@
-import sendRequest from "@/lib/request";
+'use server'
 
-export default async function login(formData: FormData) {
+import {cookies} from "next/headers";
+import { redirect } from 'next/navigation'
 
-    // TODO Refactor this to work
+export default async function storeAuthToken(token: string) {
+    cookies().set({
+        name: process.env.NEXT_PUBLIC_SANCTUM_TOKEN_NAME,
+        value: token,
+        httpOnly: true,
+        path: '/',
+        expires: Date.now() + parseInt(process.env.NEXT_PUBLIC_SANCTUM_TOKEN_EXPIRATION, 10),
+    })
+}
 
-    const credentials = {
-        email: formData.get('email'),
-        password: formData.get('password')
-    }
+export async function getAuthToken() {
+    return cookies().get(process.env.NEXT_PUBLIC_SANCTUM_TOKEN_NAME);
+}
 
-    const response = sendRequest('POST', '/login', credentials, 0)
-
-    // do the request with data
-    // check for errors
-    // display errors if there are any
-
-    // if no errors
-    // get token from headers
-    // set token in headers
+export async function redirectTo(redirectString: string) {
+    redirect(redirectString)
 }

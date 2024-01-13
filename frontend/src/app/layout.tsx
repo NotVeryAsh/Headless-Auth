@@ -12,13 +12,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout(props: {
   children: React.ReactNode,
-  backbutton: React.ReactNode
+  backButton: React.ReactNode
 }) {
   return (
     <html lang="en">
       <body className={montserrat.className + " flex min-h-screen flex-col items-center justify-between p-24 bg-slate-100"}>
         <main className="flex flex-col items-center justify-center space-y-10 w-full">
-          {props.backbutton}
+          {props.backButton}
           {props.children}
         </main>
       </body>

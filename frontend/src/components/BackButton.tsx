@@ -15,9 +15,9 @@ export default function BackButton() {
     let pathArray = pathName.split('/')
         .filter((string) => string !== '');
 
-    const isMainPage = pathArray.length === 0;
+    const isHomePage = pathArray.length === 0;
 
-    if(isMainPage) {
+    if(isHomePage) {
         return (<></>);
     }
 

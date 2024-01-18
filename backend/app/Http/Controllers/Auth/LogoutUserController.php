@@ -15,8 +15,6 @@ class LogoutUserController extends Controller
     {
         $request->user()->tokens()->delete();
 
-        return response()->json([
-            'message' => 'User successfully logged out.',
-        ], 200);
+        return response()->json([], 204);
     }
 }

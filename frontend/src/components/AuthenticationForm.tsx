@@ -73,7 +73,7 @@ async function loginUser(response: Response | undefined, name: string, errors: a
         return;
     }
 
-    if(response.status === 200) {
+    if(response.status === 200 || response.status === 201) {
 
         await storeAuthToken(data.token)
 
@@ -81,7 +81,7 @@ async function loginUser(response: Response | undefined, name: string, errors: a
     }
 }
 
-function LoginForm({method, action, name="login", buttonText, children}: {method: string, action: string, name?: string, buttonText?: string, children?: ReactNode}) {
+function AuthenticationForm({method, action, name="login", buttonText, children}: {method: string, action: string, name?: string, buttonText?: string, children?: ReactNode}) {
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [errors, setErrors] = useState([])
@@ -103,4 +103,4 @@ function LoginForm({method, action, name="login", buttonText, children}: {method
     )
 }
 
-export default LoginForm;
+export default AuthenticationForm;

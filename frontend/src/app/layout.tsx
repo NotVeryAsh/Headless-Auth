@@ -5,7 +5,9 @@ import React from "react";
 import BackButton from "@/components/BackButton";
 import LogoutButton from "@/components/LogoutButton";
 import {getAuthToken} from "@/lib/auth";
-import {usePathname} from "next/navigation";
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 

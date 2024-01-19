@@ -18,6 +18,6 @@ export default async function sendRequest(method: string, url: string, body?: an
         next: {
             revalidate: cacheTime
         },
-        credentials: 'include'
+        credentials: 'include',
     });
 }

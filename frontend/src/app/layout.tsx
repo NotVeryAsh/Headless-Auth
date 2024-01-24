@@ -22,7 +22,7 @@ export default async function RootLayout(props: {
 
   return (
     <html lang="en">
-      <body className={montserrat.className + " flex min-h-screen flex-col items-center justify-between p-24 bg-slate-100"}>
+      <body className={montserrat.className + " flex min-h-screen flex-col items-center justify-between px-24 mt-10 bg-slate-100"}>
         <main className="flex flex-col items-center justify-center space-y-10 w-full">
           <div className={"flex flex-row w-full"}>
             <BackButton />

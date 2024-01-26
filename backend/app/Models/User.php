@@ -4,7 +4,9 @@ namespace App\Models;
 
 // TODO Uncomment this line to use email verification
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -36,6 +38,11 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CalendarEvent> $calendarEvents
+ * @property-read int|null $calendar_events_count
+ * @method static Builder|User whereDuring($start, $end)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Calendar> $calendars
+ * @property-read int|null $calendars_count
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -72,4 +79,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function calendars(): HasMany
+    {
+        return $this->hasMany(Calendar::class);
+    }
 }

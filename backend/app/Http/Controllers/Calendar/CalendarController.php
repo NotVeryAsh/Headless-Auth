@@ -71,9 +71,14 @@ class CalendarController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * @throws AuthorizationException
      */
-    public function destroy(Calendar $calendar)
+    public function destroy(Calendar $calendar): JsonResponse
     {
-        //
+        $this->authorize('delete', $calendar);
+
+        $calendar->delete();
+
+        return response()->json([], 204);
     }
 }

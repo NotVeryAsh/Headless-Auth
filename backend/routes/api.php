@@ -14,6 +14,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
         Route::prefix('{calendar}')->group(function() {
             Route::get('', [CalendarController::class, 'show']);
+            Route::delete('', [CalendarController::class, 'destroy']);
         });
     });
 

@@ -22,7 +22,7 @@ class CalendarPolicy
      */
     public function view(User $user, Calendar $calendar): Response
     {
-        return$user->id->toString() === $calendar->user_id ?
+        return $user->id->toString() === $calendar->user_id ?
             Response::allow() :
             Response::denyWithStatus(404);
     }
@@ -46,9 +46,11 @@ class CalendarPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Calendar $calendar): bool
+    public function delete(User $user, Calendar $calendar): Response
     {
-        //
+        return $user->id->toString() === $calendar->user_id ?
+            Response::allow() :
+            Response::denyWithStatus(404);
     }
 
     /**

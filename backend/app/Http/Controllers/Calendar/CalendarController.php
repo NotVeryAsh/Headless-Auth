@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Calendar;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CalendarResource;
 use App\Models\Calendar;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CalendarController extends Controller
@@ -11,9 +13,11 @@ class CalendarController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        //
+        return response()->json([
+            'calendars' => CalendarResource::collection($request->user()->calendars)
+        ]);
     }
 
     /**

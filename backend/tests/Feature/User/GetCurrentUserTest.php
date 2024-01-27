@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class GetCurrentUserTest extends TestCase
 {
-    public function test_endpoint_is_successful_when_user_is_authenticated()
+    public function test_can_get_current_user()
     {
         $user = User::factory()->create([
             'name' => 'test_name',

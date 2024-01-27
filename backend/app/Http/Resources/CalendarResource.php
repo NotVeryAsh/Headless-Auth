@@ -21,8 +21,9 @@ class CalendarResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'user_id' => $this->user_id,
+            'created_at' => $this->created_at,
             'deleted_at' => $this->deleted_at,
-            'user_id' => $this->user_id
         ];
     }
 }

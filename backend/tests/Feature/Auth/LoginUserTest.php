@@ -3,6 +3,7 @@
 namespace Auth;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -11,7 +12,7 @@ class LoginUserTest extends TestCase
 {
     public function test_user_can_login_with_valid_email()
     {
-        User::factory()->create([
+        $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@test.com',
             'password' => Hash::make($password = 'password'),
@@ -24,11 +25,12 @@ class LoginUserTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertExactJson([
-            'message' => 'User successfully authenticated.',
             'user' => [
-                'id' => 1,
+                'id' => $user->id,
                 'name' => 'Test User',
                 'email' => 'test@test.com',
+                'created_at' => Carbon::now(),
+                'email_verified_at' => Carbon::now()
             ],
             'token' => $response['token'],
         ]);

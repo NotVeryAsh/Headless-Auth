@@ -36,7 +36,6 @@ class RegisterUserController extends Controller
         // event(new Registered($user));
 
         return response()->json([
-            'message' => 'User successfully registered.',
             'user' => new UserResource($user),
             'token' => $token->plainTextToken,
         ], 201);

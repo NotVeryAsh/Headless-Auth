@@ -3,6 +3,7 @@
 namespace Auth;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
@@ -29,11 +30,12 @@ class GetTokenTest extends TestCase
 
         // Assert new token has been given with user
         $response->assertExactJson([
-            'message' => 'New token successfully created.',
             'user' => [
                 'id' => $user->id,
                 'name' => 'Test user',
-                'email' => 'test@test.com'
+                'email' => 'test@test.com',
+                'created_at' => Carbon::now(),
+                'email_verified_at' => Carbon::now()
             ],
             'token' => $response['token']
         ]);

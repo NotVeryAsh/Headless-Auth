@@ -25,7 +25,6 @@ class GetUserTokenController extends Controller
         $token = $request->user()->createToken(config('sanctum.token_name'));
 
         return response()->json([
-            'message' => 'New token successfully created.',
             'user' => new UserResource($user),
             'token' => $token->plainTextToken,
         ], 201);

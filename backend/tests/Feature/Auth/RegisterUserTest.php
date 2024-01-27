@@ -3,6 +3,7 @@
 namespace Auth;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -17,14 +18,17 @@ class RegisterUserTest extends TestCase
             'name' => 'Test User',
         ]);
 
+        $user = User::query()->first();
+
         $response->assertStatus(201);
 
         $response->assertExactJson([
-            'message' => 'User successfully registered.',
             'user' => [
-                'id' => 1,
+                'id' => $user->id,
                 'name' => 'Test User',
                 'email' => 'test@test.com',
+                'created_at' => Carbon::now(),
+                'email_verified_at' => null,
             ],
             'token' => $response['token'],
         ]);

@@ -41,7 +41,6 @@ class LoginUserController extends Controller
         $token = $user->createToken(config('sanctum.token_name'));
 
         return response()->json([
-            'message' => 'User successfully authenticated.',
             'user' => new UserResource($user),
             'token' => $token->plainTextToken,
         ], 200);

@@ -15,10 +15,7 @@ class LogoutUserTest extends TestCase
 
         $response = $this->post('api/auth/logout');
 
-        $response->assertStatus(200);
-        $response->assertExactJson([
-            'message' => 'User successfully logged out.',
-        ]);
+        $response->assertStatus(204);
 
         $this->assertDatabaseEmpty('personal_access_tokens');
     }

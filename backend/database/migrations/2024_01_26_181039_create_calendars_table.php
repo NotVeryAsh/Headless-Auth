@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('calendars', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('title');
-            $table->foreignId('user_id')
+            $table->foreignUuid('user_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Calendar;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CalendarResource;
 use App\Models\Calendar;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,12 @@ class CalendarController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @throws AuthorizationException
      */
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Calendar::class);
+
         return response()->json([
             'calendars' => CalendarResource::collection($request->user()->calendars)
         ]);
@@ -38,10 +42,15 @@ class CalendarController extends Controller
 
     /**
      * Display the specified resource.
+     * @throws AuthorizationException
      */
-    public function show(Calendar $calendar)
+    public function show(Calendar $calendar): JsonResponse
     {
-        //
+        $this->authorize('view', $calendar);
+
+        return response()->json([
+            'calendar' => new CalendarResource($calendar)
+        ]);
     }
 
     /**

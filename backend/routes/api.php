@@ -13,7 +13,7 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::get('', [CalendarController::class, 'index']);
 
         Route::prefix('{calendar}')->group(function() {
-
+            Route::get('', [CalendarController::class, 'show']);
         });
     });
 

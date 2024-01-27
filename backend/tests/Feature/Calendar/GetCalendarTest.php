@@ -33,7 +33,7 @@ class GetCalendarTest extends TestCase
         ]);
     }
 
-    public function test_401_returned_when_user_not_logged_in()
+    public function test_404_returned_when_user_not_logged_in()
     {
         $user = User::factory()->create();
 
@@ -42,7 +42,7 @@ class GetCalendarTest extends TestCase
         ]);
 
         $response = $this->getJson("/api/calendars/$calendar->id");
-        $response->assertStatus(401);
+        $response->assertStatus(404);
     }
 
     public function test_404_returned_when_user_does_not_have_permission()

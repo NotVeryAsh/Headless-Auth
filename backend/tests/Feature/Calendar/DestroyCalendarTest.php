@@ -29,7 +29,7 @@ class DestroyCalendarTest extends TestCase
         ]);
     }
 
-    public function test_401_returned_when_user_not_logged_in()
+    public function test_404_returned_when_user_not_logged_in()
     {
         $user = User::factory()->create();
 
@@ -38,7 +38,7 @@ class DestroyCalendarTest extends TestCase
         ]);
 
         $response = $this->deleteJson("/api/calendars/$calendar->id");
-        $response->assertStatus(401);
+        $response->assertStatus(404);
 
         $this->assertDatabaseHas('calendars', [
             'id' => $calendar->id,

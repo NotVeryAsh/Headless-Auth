@@ -44,9 +44,9 @@ class GetCalendarsTest extends TestCase
         ]);
     }
 
-    public function test_401_returned_when_user_not_logged_in()
+    public function test_404_returned_when_user_not_logged_in()
     {
         $response = $this->getJson('/api/calendars');
-        $response->assertStatus(401);
+        $response->assertStatus(404);
     }
 }

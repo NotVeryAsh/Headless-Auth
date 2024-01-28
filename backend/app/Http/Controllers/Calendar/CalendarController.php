@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Calendar;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Calendar\CreateCalendarRequest;
+use App\Http\Requests\Calendar\UpdateCalendarRequest;
 use App\Http\Resources\CalendarResource;
 use App\Models\Calendar;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -71,10 +72,17 @@ class CalendarController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @throws AuthorizationException
      */
-    public function update(Request $request, Calendar $calendar)
+    public function update(UpdateCalendarRequest $request, Calendar $calendar): JsonResponse
     {
-        //
+        $this->authorize('update', $calendar);
+
+        $calendar->update($request->validated());
+
+        return response()->json([
+            'calendar' => new CalendarResource($calendar->fresh())
+        ], 200);
     }
 
     /**

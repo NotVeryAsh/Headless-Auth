@@ -59,4 +59,13 @@ class GetCalendarTest extends TestCase
         $response = $this->getJson("/api/calendars/$calendar->id");
         $response->assertStatus(404);
     }
+
+    public function test_404_returned_when_calendar_not_found()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $response = $this->getJson("/api/calendars/test");
+        $response->assertStatus(404);
+    }
 }

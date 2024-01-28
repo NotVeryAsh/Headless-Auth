@@ -65,4 +65,22 @@ class DestroyCalendarTest extends TestCase
             'deleted_at' => null
         ]);
     }
+
+    public function test_404_returned_when_calendar_not_found()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $calendar = $user->calendars()->create([
+            'title' => 'Test Calendar'
+        ]);
+
+        $response = $this->deleteJson("/api/calendars/test");
+        $response->assertStatus(404);
+
+        $this->assertDatabaseHas('calendars', [
+            'id' => $calendar->id,
+            'deleted_at' => null
+        ]);
+    }
 }

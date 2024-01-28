@@ -4,23 +4,25 @@ namespace Tests\Feature\Calendar;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class GetCalendarTest extends TestCase
+class RestoreCalendarTest extends TestCase
 {
-    public function test_can_get_calendar()
+    public function test_can_restore_calendar()
     {
         $user = User::factory()->create();
-
         Sanctum::actingAs($user);
 
         $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+            'title' => 'Test Calendar',
         ]);
 
-        $response = $this->getJson("/api/calendars/$calendar->id");
+        $calendar->delete();
 
+        $response = $this->patchJson("/api/calendars/$calendar->id/restore");
         $response->assertStatus(200);
         $response->assertExactJson([
             'calendar' => [
@@ -31,31 +33,30 @@ class GetCalendarTest extends TestCase
                 'deleted_at' => null,
             ]
         ]);
+
+        $this->assertDatabaseHas('calendars', [
+            'id' => $calendar->id,
+            'deleted_at' => null
+        ]);
     }
 
-    public function test_can_get_trashed_record()
+    public function test_404_returned_when_calendar_not_found()
     {
         $user = User::factory()->create();
-
         Sanctum::actingAs($user);
 
         $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+            'title' => 'Test Calendar',
         ]);
 
         $calendar->delete();
 
-        $response = $this->getJson("/api/calendars/$calendar->id");
+        $response = $this->patchJson("/api/calendars/test/restore");
+        $response->assertStatus(404);
 
-        $response->assertStatus(200);
-        $response->assertExactJson([
-            'calendar' => [
-                'id' => $calendar->id,
-                'title' => 'Test Calendar',
-                'user_id' => $user->id,
-                'created_at' => Carbon::now(),
-                'deleted_at' => Carbon::now(),
-            ]
+        $this->assertDatabaseHas('calendars', [
+            'id' => $calendar->id,
+            'deleted_at' => Carbon::now()
         ]);
     }
 
@@ -64,11 +65,18 @@ class GetCalendarTest extends TestCase
         $user = User::factory()->create();
 
         $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+            'title' => 'Test Calendar',
         ]);
 
-        $response = $this->getJson("/api/calendars/$calendar->id");
+        $calendar->delete();
+
+        $response = $this->patchJson("/api/calendars/$calendar->id/restore");
         $response->assertStatus(404);
+
+        $this->assertDatabaseHas('calendars', [
+            'id' => $calendar->id,
+            'deleted_at' => Carbon::now()
+        ]);
     }
 
     public function test_404_returned_when_user_does_not_have_permission()
@@ -82,16 +90,14 @@ class GetCalendarTest extends TestCase
             'title' => 'Test Calendar'
         ]);
 
-        $response = $this->getJson("/api/calendars/$calendar->id");
-        $response->assertStatus(404);
-    }
+        $calendar->delete();
 
-    public function test_404_returned_when_calendar_not_found()
-    {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
-        $response = $this->getJson("/api/calendars/test");
+        $response = $this->patchJson("/api/calendars/$calendar->id/restore");
         $response->assertStatus(404);
+
+        $this->assertDatabaseHas('calendars', [
+            'id' => $calendar->id,
+            'deleted_at' => Carbon::now()
+        ]);
     }
 }

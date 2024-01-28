@@ -17,7 +17,8 @@ class CalendarFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->name
+            'title' => fake()->name,
+            'deleted_at' => null
         ];
     }
 }

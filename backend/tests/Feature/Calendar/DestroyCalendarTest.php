@@ -21,7 +21,17 @@ class DestroyCalendarTest extends TestCase
 
         $response = $this->deleteJson("/api/calendars/$calendar->id");
 
-        $response->assertStatus(204);
+        $response->assertStatus(200);
+
+        $response->assertExactJson([
+            'calendar' => [
+                'id' => $calendar->id,
+                'title' => 'Test Calendar',
+                'user_id' => $user->id,
+                'created_at' => Carbon::now(),
+                'deleted_at' => Carbon::now(),
+            ]
+        ]);
 
         $this->assertDatabaseHas('calendars', [
             'id' => $calendar->id,

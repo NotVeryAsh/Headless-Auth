@@ -17,7 +17,7 @@ return new class extends Migration
             $table->boolean('all_day')->default(false);
             $table->dateTime('start');
             $table->dateTime('end');
-            $table->foreignUuid('user_id')
+            $table->foreignUuid('calendar_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

@@ -11,12 +11,13 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('calendars')->group(function() {
 
         Route::get('', [CalendarController::class, 'index']);
-        Route::post('', [CalendarController::class, 'create']);
+        Route::post('', [CalendarController::class, 'store']);
 
         Route::prefix('{calendar}')->group(function() {
-            Route::get('', [CalendarController::class, 'show']);
+            Route::get('', [CalendarController::class, 'show'])->withTrashed();
             Route::put('', [CalendarController::class, 'update']);
             Route::delete('', [CalendarController::class, 'destroy']);
+            Route::patch('restore', [CalendarController::class, 'restore'])->withTrashed();
         });
     });
 

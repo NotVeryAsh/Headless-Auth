@@ -59,9 +59,11 @@ class CalendarPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Calendar $calendar): bool
+    public function restore(User $user, Calendar $calendar): Response
     {
-        //
+        return $user->id->toString() === $calendar->user_id ?
+            Response::allow() :
+            Response::denyWithStatus(404);
     }
 
     /**

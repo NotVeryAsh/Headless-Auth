@@ -13,7 +13,7 @@ class CalendarPolicy
      */
     public function viewAny(User $user): bool
     {
-        // No condition required as of now since a viewer is only ever shown their own calendars
+        // No condition required as of now since a user is only ever shown their own calendars
         return true;
     }
 
@@ -32,7 +32,8 @@ class CalendarPolicy
      */
     public function create(User $user): bool
     {
-        //
+        // No condition required as of now since a user is only ever shown their own calendars
+        return true;
     }
 
     /**

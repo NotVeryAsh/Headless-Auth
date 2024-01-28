@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Calendar;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Calendar\CreateCalendarRequest;
 use App\Http\Resources\CalendarResource;
 use App\Models\Calendar;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -26,10 +27,17 @@ class CalendarController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * @throws AuthorizationException
      */
-    public function create()
+    public function create(CreateCalendarRequest $request): JsonResponse
     {
-        //
+        $this->authorize('create', Calendar::class);
+
+        $calendar = $request->user()->calendars()->create($request->validated());
+
+        return response()->json([
+            'calendar' => new CalendarResource($calendar)
+        ], 201);
     }
 
     /**

@@ -11,6 +11,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('calendars')->group(function() {
 
         Route::get('', [CalendarController::class, 'index']);
+        Route::post('', [CalendarController::class, 'create']);
 
         Route::prefix('{calendar}')->group(function() {
             Route::get('', [CalendarController::class, 'show']);

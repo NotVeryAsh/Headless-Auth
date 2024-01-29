@@ -25,7 +25,8 @@ class CalendarEventResource extends JsonResource
             'start' => $this->start,
             'end' => $this->end,
             'calendar_id' => $this->calendar_id,
-            'deleted_at' => $this->deleted_at
+            'deleted_at' => $this->deleted_at,
+            'created_at' => $this->created_at,
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Calendar;
 use App\Models\CalendarEvent;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -19,9 +20,11 @@ class CalendarEventPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, CalendarEvent $calendarEvent): bool
+    public function view(User $user, CalendarEvent $calendarEvent): Response
     {
-        //
+        return $user->id->toString() === $calendarEvent->calendar->user_id ?
+            Response::allow() :
+            Response::denyWithStatus(404);
     }
 
     /**

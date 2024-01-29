@@ -10,7 +10,6 @@ use App\Http\Resources\CalendarResource;
 use App\Models\Calendar;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CalendarController extends Controller
 {

@@ -4,30 +4,22 @@ namespace App\Http\Controllers\Calendar;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CalendarEventResource;
+use App\Models\CalendarEvent;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Carbon;
 
 class CalendarEventController extends Controller
 {
-    public function index(/*GetCalendarEventsRequest $request, Calendar $calendar*/): JsonResponse
+    /**
+     * Display the specified resource.
+     * @throws AuthorizationException
+     */
+    public function show(CalendarEvent $calendarEvent): JsonResponse
     {
-        // TODO Authorize user
-
-        // TODO Write tests
-        // TODO Needs better url -> calendar/*calendar*/events then see if user has permission
-
-/*        $user = $request->user();
-
-        $start = $request->validated('start', Carbon::now()->startOfMonth());
-        $end = $request->validated('end', Carbon::now()->endOfMonth());
-
-        $events = $user->calendarEvents()
-            ->whereDuring($start, $end)
-            ->orderBy('start', 'asc')
-            ->get();
+        $this->authorize('view', $calendarEvent);
 
         return response()->json([
-            'events' => CalendarEventResource::collection($events)
-        ], 200);*/
+            'calendar_event' => new CalendarEventResource($calendarEvent)
+        ]);
     }
 }

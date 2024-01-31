@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Calendar;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,11 @@ class CalendarEventFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => fake()->name(),
+            'all_day' => fake()->boolean(),
+            'start' => fake()->dateTime(),
+            'end' => fake()->dateTime(),
+            'calendar_id' => Calendar::query()->first()->id,
         ];
     }
 }

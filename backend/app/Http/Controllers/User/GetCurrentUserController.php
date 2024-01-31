@@ -12,7 +12,7 @@ class GetCurrentUserController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         return response()->json([
-            'user' => new UserResource($request->user())
+            'user' => new UserResource($request->user()),
         ], 200);
     }
 }

@@ -13,7 +13,7 @@ class GetCurrentUserTest extends TestCase
     {
         $user = User::factory()->create([
             'name' => 'test_name',
-            'email' => 'test@test.com'
+            'email' => 'test@test.com',
         ]);
 
         Sanctum::actingAs($user);
@@ -27,8 +27,8 @@ class GetCurrentUserTest extends TestCase
                 'name' => 'test_name',
                 'email' => 'test@test.com',
                 'created_at' => Carbon::now(),
-                'email_verified_at' => Carbon::now()
-            ]
+                'email_verified_at' => Carbon::now(),
+            ],
         ]);
     }
 

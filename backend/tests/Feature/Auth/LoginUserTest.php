@@ -30,7 +30,7 @@ class LoginUserTest extends TestCase
                 'name' => 'Test User',
                 'email' => 'test@test.com',
                 'created_at' => Carbon::now(),
-                'email_verified_at' => Carbon::now()
+                'email_verified_at' => Carbon::now(),
             ],
             'token' => $response['token'],
         ]);

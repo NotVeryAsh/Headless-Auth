@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,8 @@ class CalendarFactory extends Factory
     {
         return [
             'title' => fake()->name,
-            'deleted_at' => null
+            'deleted_at' => null,
+            'user_id' => User::query()->first()->id,
         ];
     }
 }

@@ -15,6 +15,7 @@ class CalendarController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
      * @throws AuthorizationException
      */
     public function index(GetCalendarsRequest $request): JsonResponse
@@ -29,12 +30,13 @@ class CalendarController extends Controller
             $user->calendars;
 
         return response()->json([
-            'calendars' => CalendarResource::collection($calendars)
+            'calendars' => CalendarResource::collection($calendars),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
+     *
      * @throws AuthorizationException
      */
     public function store(CreateCalendarRequest $request): JsonResponse
@@ -44,12 +46,13 @@ class CalendarController extends Controller
         $calendar = $request->user()->calendars()->create($request->validated());
 
         return response()->json([
-            'calendar' => new CalendarResource($calendar)
+            'calendar' => new CalendarResource($calendar),
         ], 201);
     }
 
     /**
      * Display the specified resource.
+     *
      * @throws AuthorizationException
      */
     public function show(Calendar $calendar): JsonResponse
@@ -57,12 +60,13 @@ class CalendarController extends Controller
         $this->authorize('view', $calendar);
 
         return response()->json([
-            'calendar' => new CalendarResource($calendar)
+            'calendar' => new CalendarResource($calendar),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
+     *
      * @throws AuthorizationException
      */
     public function update(UpdateCalendarRequest $request, Calendar $calendar): JsonResponse
@@ -72,12 +76,13 @@ class CalendarController extends Controller
         $calendar->update($request->validated());
 
         return response()->json([
-            'calendar' => new CalendarResource($calendar->fresh())
+            'calendar' => new CalendarResource($calendar->fresh()),
         ], 200);
     }
 
     /**
      * Update the specified resource in storage.
+     *
      * @throws AuthorizationException
      */
     public function restore(Calendar $calendar): JsonResponse
@@ -87,12 +92,13 @@ class CalendarController extends Controller
         $calendar->restore();
 
         return response()->json([
-            'calendar' => new CalendarResource($calendar->fresh())
+            'calendar' => new CalendarResource($calendar->fresh()),
         ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
+     *
      * @throws AuthorizationException
      */
     public function destroy(Calendar $calendar): JsonResponse
@@ -102,7 +108,7 @@ class CalendarController extends Controller
         $calendar->delete();
 
         return response()->json([
-            'calendar' => new CalendarResource($calendar->fresh())
+            'calendar' => new CalendarResource($calendar->fresh()),
         ], 200);
     }
 }

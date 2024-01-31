@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Database\Factories\CalendarEventFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent newQuery()
@@ -37,13 +38,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent withoutTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CalendarEvent whereUserId($value)
+ *
  * @property-read \App\Models\Calendar|null $calendar
+ *
  * @method static Builder|CalendarEvent whereDuring($start, $end)
+ *
  * @mixin \Eloquent
  */
 class CalendarEvent extends Model
 {
-    use HasFactory, SoftDeletes, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $keyType = 'string';
 
@@ -54,7 +58,7 @@ class CalendarEvent extends Model
         'all_day',
         'start',
         'end',
-        'calendar_id'
+        'calendar_id',
     ];
 
     public function calendar(): BelongsTo

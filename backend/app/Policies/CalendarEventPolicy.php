@@ -12,9 +12,11 @@ class CalendarEventPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user, Calendar $calendar): Response
     {
-        //
+        return $user->id->toString() === $calendar->user_id ?
+            Response::allow() :
+            Response::denyWithStatus(404);
     }
 
     /**

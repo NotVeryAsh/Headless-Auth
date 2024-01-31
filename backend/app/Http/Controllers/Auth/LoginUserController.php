@@ -29,10 +29,10 @@ class LoginUserController extends Controller
             return response()->json([
                 'errors' => [
                     'password' => [
-                        $message
-                    ]
+                        $message,
+                    ],
                 ],
-                'message' => $message
+                'message' => $message,
             ], 422);
         }
 

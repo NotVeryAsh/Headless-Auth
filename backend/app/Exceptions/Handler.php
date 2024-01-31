@@ -4,7 +4,6 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -21,7 +20,7 @@ class Handler extends ExceptionHandler
 
     private array $noneHiddenRoutes = [
         'api/auth/*',
-        'api/user'
+        'api/user',
     ];
 
     /**
@@ -31,7 +30,7 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (AuthenticationException $e) {
 
-            if (request()->is('api/*') && !request()->is(...$this->noneHiddenRoutes)) {
+            if (request()->is('api/*') && ! request()->is(...$this->noneHiddenRoutes)) {
 
                 // Return 404 for routes with resources - so users can't guess ids and such of resources
                 return response()->json([], 404);

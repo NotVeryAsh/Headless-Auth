@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Calendar;
 
+use App\Models\Calendar;
 use App\Models\User;
 use Carbon\Carbon;
 use Laravel\Sanctum\Sanctum;
@@ -15,8 +16,8 @@ class GetCalendarTest extends TestCase
 
         Sanctum::actingAs($user);
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        $calendar = Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
         $response = $this->getJson("/api/calendars/$calendar->id");
@@ -29,7 +30,7 @@ class GetCalendarTest extends TestCase
                 'user_id' => $user->id,
                 'created_at' => Carbon::now(),
                 'deleted_at' => null,
-            ]
+            ],
         ]);
     }
 
@@ -39,8 +40,8 @@ class GetCalendarTest extends TestCase
 
         Sanctum::actingAs($user);
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        $calendar = Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
         $calendar->delete();
@@ -55,16 +56,16 @@ class GetCalendarTest extends TestCase
                 'user_id' => $user->id,
                 'created_at' => Carbon::now(),
                 'deleted_at' => Carbon::now(),
-            ]
+            ],
         ]);
     }
 
     public function test_404_returned_when_user_not_logged_in()
     {
-        $user = User::factory()->create();
+        User::factory()->create();
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        $calendar = Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
         $response = $this->getJson("/api/calendars/$calendar->id");
@@ -73,13 +74,13 @@ class GetCalendarTest extends TestCase
 
     public function test_404_returned_when_user_does_not_have_permission()
     {
-        $user = User::factory()->create();
+        User::factory()->create();
         $userTwo = User::factory()->create();
 
         Sanctum::actingAs($userTwo);
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        $calendar = Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
         $response = $this->getJson("/api/calendars/$calendar->id");
@@ -91,7 +92,7 @@ class GetCalendarTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->getJson("/api/calendars/test");
+        $response = $this->getJson('/api/calendars/test');
         $response->assertStatus(404);
     }
 }

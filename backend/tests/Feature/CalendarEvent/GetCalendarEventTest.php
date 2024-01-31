@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\CalendarEvent;
 
+use App\Models\Calendar;
 use App\Models\CalendarEvent;
 use App\Models\User;
 use Carbon\Carbon;
@@ -16,11 +17,11 @@ class GetCalendarEventTest extends TestCase
 
         Sanctum::actingAs($user);
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        $calendar = Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
-        $calendarEvent = $calendar->calendarEvents()->create([
+        $calendarEvent = CalendarEvent::factory()->create([
             'calendar_id' => $calendar->id,
             'title' => 'Test title',
             'all_day' => true,
@@ -40,8 +41,8 @@ class GetCalendarEventTest extends TestCase
                 'end' => Carbon::tomorrow()->format('Y-m-d H:i:s'),
                 'calendar_id' => $calendarEvent->calendar_id,
                 'deleted_at' => null,
-                'created_at' => Carbon::now()
-            ]
+                'created_at' => Carbon::now(),
+            ],
         ]);
     }
 
@@ -51,11 +52,11 @@ class GetCalendarEventTest extends TestCase
 
         Sanctum::actingAs($user);
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
-        $calendarEvent = $calendar->calendarEvents()->create([
+        $calendarEvent = CalendarEvent::factory()->create([
             'title' => 'Test title',
             'all_day' => false,
             'start' => Carbon::now(),
@@ -76,20 +77,20 @@ class GetCalendarEventTest extends TestCase
                 'end' => Carbon::tomorrow()->format('Y-m-d H:i:s'),
                 'calendar_id' => $calendarEvent->calendar_id,
                 'deleted_at' => Carbon::now(),
-                'created_at' => Carbon::now()
-            ]
+                'created_at' => Carbon::now(),
+            ],
         ]);
     }
 
     public function test_404_returned_when_user_not_logged_in()
     {
-        $user = User::factory()->create();
+        User::factory()->create();
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
-        $calendarEvent = $calendar->calendarEvents()->create([
+        $calendarEvent = CalendarEvent::factory()->create([
             'title' => 'Test title',
             'all_day' => false,
             'start' => Carbon::now(),
@@ -107,11 +108,11 @@ class GetCalendarEventTest extends TestCase
 
         Sanctum::actingAs($userTwo);
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        $calendar = Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
-        $calendarEvent = $calendar->calendarEvents()->create([
+        $calendarEvent = CalendarEvent::factory()->create([
             'title' => 'Test title',
             'all_day' => false,
             'start' => Carbon::now(),
@@ -127,7 +128,7 @@ class GetCalendarEventTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->getJson("/api/calendar-events/test");
+        $response = $this->getJson('/api/calendar-events/test');
         $response->assertStatus(404);
     }
 }

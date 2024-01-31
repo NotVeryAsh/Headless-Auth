@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Calendar;
 
+use App\Models\Calendar;
 use App\Models\User;
 use Carbon\Carbon;
 use Laravel\Sanctum\Sanctum;
@@ -14,16 +15,16 @@ class GetCalendarsTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $calendarOne = $user->calendars()->create([
+        $calendarOne = Calendar::factory()->create([
             'title' => 'Test Calendar',
         ]);
 
-        $calendarTwo = $user->calendars()->create([
+        $calendarTwo = Calendar::factory()->create([
             'title' => 'Test Calendar 2',
         ]);
 
         // Test Calendar 3 should not be returned since it is trashed
-        $calendarThree = $user->calendars()->create([
+        $calendarThree = Calendar::factory()->create([
             'title' => 'Test Calendar 3',
         ]);
 
@@ -46,8 +47,8 @@ class GetCalendarsTest extends TestCase
                     'user_id' => $user->id,
                     'created_at' => Carbon::now(),
                     'deleted_at' => null,
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
@@ -56,14 +57,14 @@ class GetCalendarsTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $calendarOne = $user->calendars()->create([
+        $calendarOne = Calendar::factory()->create([
             'title' => 'Test Calendar',
         ]);
 
         $calendarOne->delete();
 
         // Test Calendar 2 should not be returned since it is not trashed
-        $user->calendars()->create([
+        Calendar::factory()->create([
             'title' => 'Test Calendar 2',
         ]);
 
@@ -77,8 +78,8 @@ class GetCalendarsTest extends TestCase
                     'user_id' => $user->id,
                     'created_at' => Carbon::now(),
                     'deleted_at' => Carbon::now(),
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
@@ -93,9 +94,9 @@ class GetCalendarsTest extends TestCase
             'message' => 'The trashed field must be true or false.',
             'errors' => [
                 'trashed' => [
-                    'The trashed field must be true or false.'
-                ]
-            ]
+                    'The trashed field must be true or false.',
+                ],
+            ],
         ]);
     }
 

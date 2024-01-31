@@ -17,7 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Calendar::class => CalendarPolicy::class,
-        CalendarEvent::class => CalendarEventPolicy::class
+        CalendarEvent::class => CalendarEventPolicy::class,
     ];
 
     /**

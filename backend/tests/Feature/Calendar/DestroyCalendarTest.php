@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Calendar;
 
+use App\Models\Calendar;
 use App\Models\User;
 use Carbon\Carbon;
 use Laravel\Sanctum\Sanctum;
@@ -15,8 +16,8 @@ class DestroyCalendarTest extends TestCase
 
         Sanctum::actingAs($user);
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        $calendar = Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
         $response = $this->deleteJson("/api/calendars/$calendar->id");
@@ -30,21 +31,21 @@ class DestroyCalendarTest extends TestCase
                 'user_id' => $user->id,
                 'created_at' => Carbon::now(),
                 'deleted_at' => Carbon::now(),
-            ]
+            ],
         ]);
 
         $this->assertDatabaseHas('calendars', [
             'id' => $calendar->id,
-            'deleted_at' => Carbon::now()
+            'deleted_at' => Carbon::now(),
         ]);
     }
 
     public function test_404_returned_when_user_not_logged_in()
     {
-        $user = User::factory()->create();
+        User::factory()->create();
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        $calendar = Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
         $response = $this->deleteJson("/api/calendars/$calendar->id");
@@ -52,19 +53,19 @@ class DestroyCalendarTest extends TestCase
 
         $this->assertDatabaseHas('calendars', [
             'id' => $calendar->id,
-            'deleted_at' => null
+            'deleted_at' => null,
         ]);
     }
 
     public function test_404_returned_when_user_does_not_have_permission()
     {
-        $user = User::factory()->create();
+        User::factory()->create();
         $userTwo = User::factory()->create();
 
         Sanctum::actingAs($userTwo);
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        $calendar = Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
         $response = $this->deleteJson("/api/calendars/$calendar->id");
@@ -72,7 +73,7 @@ class DestroyCalendarTest extends TestCase
 
         $this->assertDatabaseHas('calendars', [
             'id' => $calendar->id,
-            'deleted_at' => null
+            'deleted_at' => null,
         ]);
     }
 
@@ -81,16 +82,16 @@ class DestroyCalendarTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $calendar = $user->calendars()->create([
-            'title' => 'Test Calendar'
+        $calendar = Calendar::factory()->create([
+            'title' => 'Test Calendar',
         ]);
 
-        $response = $this->deleteJson("/api/calendars/test");
+        $response = $this->deleteJson('/api/calendars/test');
         $response->assertStatus(404);
 
         $this->assertDatabaseHas('calendars', [
             'id' => $calendar->id,
-            'deleted_at' => null
+            'deleted_at' => null,
         ]);
     }
 }

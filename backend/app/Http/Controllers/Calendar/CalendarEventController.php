@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Calendar;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CalendarEvents\GetCalendarEventsRequest;
 use App\Http\Resources\CalendarEventResource;
+use App\Http\Resources\CalendarResource;
 use App\Models\Calendar;
 use App\Models\CalendarEvent;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -44,5 +45,21 @@ class CalendarEventController extends Controller
         return response()->json([
             'calendar_event' => new CalendarEventResource($calendarEvent),
         ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @throws AuthorizationException
+     */
+    public function destroy(CalendarEvent $calendarEvent): JsonResponse
+    {
+        $this->authorize('delete', $calendarEvent);
+
+        $calendarEvent->delete();
+
+        return response()->json([
+            'calendar_events' => new CalendarEventResource($calendarEvent->fresh()),
+        ], 200);
     }
 }

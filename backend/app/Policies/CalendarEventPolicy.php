@@ -32,9 +32,11 @@ class CalendarEventPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Calendar $calendar): Response
     {
-        //
+        return $user->id->toString() === $calendar->user_id ?
+            Response::allow() :
+            Response::denyWithStatus(404);
     }
 
     /**

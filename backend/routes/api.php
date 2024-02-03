@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
             Route::prefix('calendar-events')->group(function () {
                 Route::get('', [CalendarEventController::class, 'index'])->withTrashed();
+                Route::post('', [CalendarEventController::class, 'store']);
             });
         });
     });

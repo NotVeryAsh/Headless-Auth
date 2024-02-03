@@ -43,7 +43,9 @@ class CalendarController extends Controller
     {
         $this->authorize('create', Calendar::class);
 
-        $calendar = $request->user()->calendars()->create($request->validated());
+        $calendar = $request->user()->calendars()->create([
+            'title' => $request->validated('title')
+        ]);
 
         return response()->json([
             'calendar' => new CalendarResource($calendar),

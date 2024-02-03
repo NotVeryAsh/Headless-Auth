@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Calendar;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Calendar\CreateCalendarRequest;
+use App\Http\Requests\CalendarEvents\CreateCalendarEventsRequest;
 use App\Http\Requests\CalendarEvents\GetCalendarEventsRequest;
 use App\Http\Resources\CalendarEventResource;
 use App\Http\Resources\CalendarResource;
@@ -31,6 +33,27 @@ class CalendarEventController extends Controller
         return response()->json([
             'calendar_events' => CalendarEventResource::collection($calendarEvents),
         ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @throws AuthorizationException
+     */
+    public function store(CreateCalendarEventsRequest $request, Calendar $calendar): JsonResponse
+    {
+        $this->authorize('create', [CalendarEvent::class, $calendar]);
+
+        $calendarEvent = $calendar->calendarEvents()->create([
+            'title' => $request->validated('title'),
+            'start' => $request->validated('start'),
+            'end' => $request->validated('end'),
+            'all_day' => $request->validated('all_day', true)
+        ]);
+
+        return response()->json([
+            'calendar_event' => new CalendarEventResource($calendarEvent),
+        ], 201);
     }
 
     /**

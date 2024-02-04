@@ -149,7 +149,7 @@ class GetCalendarEventsTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        $response = $this->getJson("/api/calendars/$calendar->id");
+        $response = $this->getJson("/api/calendars/$calendar->id/calendar-events");
         $response->assertStatus(404);
     }
 
@@ -158,7 +158,7 @@ class GetCalendarEventsTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->getJson('/api/calendars/test');
+        $response = $this->getJson('/api/calendars/test/calendar-events');
         $response->assertStatus(404);
     }
 }

@@ -15,7 +15,7 @@ use Tests\TestCase;
 
 class UpdateCalendarEventTest extends TestCase
 {
-    public function test_can_update_calendar()
+    public function test_can_update_calendar_event()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);

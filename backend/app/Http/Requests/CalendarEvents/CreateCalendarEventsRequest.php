@@ -17,22 +17,22 @@ class CreateCalendarEventsRequest extends FormRequest
             'title' => [
                 'required',
                 'string',
-                'max:255'
+                'max:255',
             ],
             'start' => [
                 'required',
                 'date',
-                'before_or_equal:end'
+                'before_or_equal:end',
             ],
             'end' => [
                 'required',
                 'date',
-                'after_or_equal:start'
+                'after_or_equal:start',
             ],
             'all_day' => [
                 'required',
-                'boolean'
-            ]
+                'boolean',
+            ],
         ];
     }
 

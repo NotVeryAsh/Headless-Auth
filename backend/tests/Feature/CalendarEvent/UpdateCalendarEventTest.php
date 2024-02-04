@@ -6,9 +6,6 @@ use App\Models\Calendar;
 use App\Models\CalendarEvent;
 use App\Models\User;
 use Carbon\Carbon;
-use Database\Factories\CalendarEventFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -26,14 +23,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("api/calendar-events/$calendarEvent->id", [
             'title' => 'Updated Calendar Event',
             'start' => '2021-01-01 00:00:00',
             'end' => '2022-01-01 00:00:00',
-            'all_day' => 1
+            'all_day' => 1,
         ]);
 
         $response->assertStatus(200);
@@ -69,7 +66,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id");
@@ -80,7 +77,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -95,7 +92,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson('/api/calendar-events/test');
@@ -106,7 +103,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -123,7 +120,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
@@ -137,7 +134,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -152,14 +149,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => '',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -177,7 +174,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -192,14 +189,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => 0,
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -217,7 +214,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -232,14 +229,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => Str::random(256),
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -257,7 +254,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -272,14 +269,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => 'Test Calendar Event',
             'start' => '',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -297,7 +294,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -312,14 +309,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => 'Test Calendar Event',
             'start' => 'test',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -337,7 +334,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -352,14 +349,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => 'Test Calendar Event',
             'start' => '2021-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -370,7 +367,7 @@ class UpdateCalendarEventTest extends TestCase
                     'The start date must be the same as or before the end date.',
                 ],
                 'end' => [
-                    'The end date must be the same as or after the start date.'
+                    'The end date must be the same as or after the start date.',
                 ],
             ],
         ]);
@@ -380,7 +377,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -395,21 +392,21 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
         $response->assertStatus(422);
         $response->assertExactJson([
             'message' => 'The start date must be the same as or before the end date. (and 1 more error)',
             'errors' => [
                 'start' => [
-                    'The start date must be the same as or before the end date.'
+                    'The start date must be the same as or before the end date.',
                 ],
                 'end' => [
                     'The end date is required.',
@@ -422,7 +419,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -437,14 +434,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => 'test',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -452,11 +449,11 @@ class UpdateCalendarEventTest extends TestCase
             'message' => 'The start date must be the same as or before the end date. (and 2 more errors)',
             'errors' => [
                 'start' => [
-                    'The start date must be the same as or before the end date.'
+                    'The start date must be the same as or before the end date.',
                 ],
                 'end' => [
                     'The end date is invalid.',
-                    'The end date must be the same as or after the start date.'
+                    'The end date must be the same as or after the start date.',
                 ],
             ],
         ]);
@@ -466,7 +463,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -481,14 +478,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2019-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -496,7 +493,7 @@ class UpdateCalendarEventTest extends TestCase
             'message' => 'The start date must be the same as or before the end date. (and 1 more error)',
             'errors' => [
                 'start' => [
-                    'The start date must be the same as or before the end date.'
+                    'The start date must be the same as or before the end date.',
                 ],
                 'end' => [
                     'The end date must be the same as or after the start date.',
@@ -509,7 +506,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -524,14 +521,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => ''
+            'all_day' => '',
         ]);
 
         $response->assertStatus(422);
@@ -549,7 +546,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 
@@ -564,14 +561,14 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 'test'
+            'all_day' => 'test',
         ]);
 
         $response->assertStatus(422);
@@ -589,7 +586,7 @@ class UpdateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
     }
 }

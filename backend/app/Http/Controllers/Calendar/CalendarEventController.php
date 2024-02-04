@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Calendar;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Calendar\CreateCalendarRequest;
-use App\Http\Requests\Calendar\UpdateCalendarRequest;
 use App\Http\Requests\CalendarEvents\CreateCalendarEventsRequest;
 use App\Http\Requests\CalendarEvents\GetCalendarEventsRequest;
 use App\Http\Requests\CalendarEvents\UpdateCalendarEventsRequest;
 use App\Http\Resources\CalendarEventResource;
-use App\Http\Resources\CalendarResource;
 use App\Models\Calendar;
 use App\Models\CalendarEvent;
 use Illuminate\Auth\Access\AuthorizationException;

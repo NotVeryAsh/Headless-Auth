@@ -67,7 +67,7 @@ class CreateCalendarEventTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->postJson("/api/calendars/test/calendar-events");
+        $response = $this->postJson('/api/calendars/test/calendar-events');
         $response->assertStatus(404);
 
         $this->assertDatabaseEmpty('calendar_events');
@@ -103,7 +103,7 @@ class CreateCalendarEventTest extends TestCase
         $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
         $response->assertStatus(422);
         $response->assertExactJson([
@@ -128,7 +128,7 @@ class CreateCalendarEventTest extends TestCase
             'title' => 1,
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -154,7 +154,7 @@ class CreateCalendarEventTest extends TestCase
             'title' => Str::random(256),
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -179,7 +179,7 @@ class CreateCalendarEventTest extends TestCase
         $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
             'title' => 'Test Calendar Event',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -205,7 +205,7 @@ class CreateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => 'test',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -231,7 +231,7 @@ class CreateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2021-01-01 00:00:00',
             'end' => '2020-01-01 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -259,7 +259,7 @@ class CreateCalendarEventTest extends TestCase
         $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -288,7 +288,7 @@ class CreateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'end' => 'test',
             'start' => '2020-01-01 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -297,7 +297,7 @@ class CreateCalendarEventTest extends TestCase
             'errors' => [
                 'end' => [
                     'The end date is invalid.',
-                    'The end date must be the same as or after the start date.'
+                    'The end date must be the same as or after the start date.',
                 ],
                 'start' => [
                     'The start date must be the same as or before the end date.',
@@ -318,7 +318,7 @@ class CreateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2021-01-01 00:00:00',
             'end' => '2020-01-01 00:00:00',
-            'all_day' => 0
+            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -372,7 +372,7 @@ class CreateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 'test'
+            'all_day' => 'test',
         ]);
 
         $response->assertStatus(422);

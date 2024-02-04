@@ -18,25 +18,25 @@ class UpdateCalendarEventsRequest extends FormRequest
                 'sometimes',
                 'required',
                 'string',
-                'max:255'
+                'max:255',
             ],
             'start' => [
                 'sometimes',
                 'required',
                 'date',
-                'before_or_equal:end'
+                'before_or_equal:end',
             ],
             'end' => [
                 'sometimes',
                 'required',
                 'date',
-                'after_or_equal:start'
+                'after_or_equal:start',
             ],
             'all_day' => [
                 'sometimes',
                 'required',
-                'boolean'
-            ]
+                'boolean',
+            ],
         ];
     }
 

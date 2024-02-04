@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Calendar;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Calendar\CreateCalendarRequest;
+use App\Http\Requests\Calendar\UpdateCalendarRequest;
 use App\Http\Requests\CalendarEvents\CreateCalendarEventsRequest;
 use App\Http\Requests\CalendarEvents\GetCalendarEventsRequest;
+use App\Http\Requests\CalendarEvents\UpdateCalendarEventsRequest;
 use App\Http\Resources\CalendarEventResource;
 use App\Http\Resources\CalendarResource;
 use App\Models\Calendar;
@@ -44,12 +46,7 @@ class CalendarEventController extends Controller
     {
         $this->authorize('create', [CalendarEvent::class, $calendar]);
 
-        $calendarEvent = $calendar->calendarEvents()->create([
-            'title' => $request->validated('title'),
-            'start' => $request->validated('start'),
-            'end' => $request->validated('end'),
-            'all_day' => $request->validated('all_day', true)
-        ]);
+        $calendarEvent = $calendar->calendarEvents()->create($request->validated());
 
         return response()->json([
             'calendar_event' => new CalendarEventResource($calendarEvent),
@@ -68,6 +65,22 @@ class CalendarEventController extends Controller
         return response()->json([
             'calendar_event' => new CalendarEventResource($calendarEvent),
         ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @throws AuthorizationException
+     */
+    public function update(UpdateCalendarEventsRequest $request, CalendarEvent $calendarEvent): JsonResponse
+    {
+        $this->authorize('update', $calendarEvent);
+
+        $calendarEvent->update($request->validated());
+
+        return response()->json([
+            'calendar_event' => new CalendarEventResource($calendarEvent->fresh()),
+        ], 200);
     }
 
     /**

@@ -42,9 +42,11 @@ class CalendarEventPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, CalendarEvent $calendarEvent): bool
+    public function update(User $user, CalendarEvent $calendarEvent): Response
     {
-        //
+        return $user->id->toString() === $calendarEvent->calendar->user_id ?
+            Response::allow() :
+            Response::denyWithStatus(404);
     }
 
     /**

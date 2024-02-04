@@ -103,6 +103,7 @@ class CreateCalendarEventTest extends TestCase
         $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
+            'all_day' => 0
         ]);
         $response->assertStatus(422);
         $response->assertExactJson([
@@ -127,6 +128,7 @@ class CreateCalendarEventTest extends TestCase
             'title' => 1,
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
+            'all_day' => 0
         ]);
 
         $response->assertStatus(422);
@@ -152,6 +154,7 @@ class CreateCalendarEventTest extends TestCase
             'title' => Str::random(256),
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
+            'all_day' => 0
         ]);
 
         $response->assertStatus(422);
@@ -176,6 +179,7 @@ class CreateCalendarEventTest extends TestCase
         $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
             'title' => 'Test Calendar Event',
             'end' => '2021-01-01 00:00:00',
+            'all_day' => 0
         ]);
 
         $response->assertStatus(422);
@@ -201,6 +205,7 @@ class CreateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => 'test',
             'end' => '2021-01-01 00:00:00',
+            'all_day' => 0
         ]);
 
         $response->assertStatus(422);
@@ -209,6 +214,35 @@ class CreateCalendarEventTest extends TestCase
             'errors' => [
                 'start' => [
                     'The start date is invalid.',
+                ],
+            ],
+        ]);
+
+        $this->assertDatabaseEmpty('calendar_events');
+    }
+
+    public function test_start_must_be_before_or_equal_to_start()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $calendar = Calendar::factory()->create();
+        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+            'title' => 'Test Calendar Event',
+            'start' => '2021-01-01 00:00:00',
+            'end' => '2020-01-01 00:00:00',
+            'all_day' => 0
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertExactJson([
+            'message' => 'The start date must be the same as or before the end date. (and 1 more error)',
+            'errors' => [
+                'end' => [
+                    'The end date must be the same as or after the start date.',
+                ],
+                'start' => [
+                    'The start date must be the same as or before the end date.',
                 ],
             ],
         ]);
@@ -225,14 +259,18 @@ class CreateCalendarEventTest extends TestCase
         $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
+            'all_day' => 0
         ]);
 
         $response->assertStatus(422);
         $response->assertExactJson([
-            'message' => 'The end date is required.',
+            'message' => 'The start date must be the same as or before the end date. (and 1 more error)',
             'errors' => [
                 'end' => [
                     'The end date is required.',
+                ],
+                'start' => [
+                    'The start date must be the same as or before the end date.',
                 ],
             ],
         ]);
@@ -250,15 +288,19 @@ class CreateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'end' => 'test',
             'start' => '2020-01-01 00:00:00',
+            'all_day' => 0
         ]);
 
         $response->assertStatus(422);
         $response->assertExactJson([
-            'message' => 'The end date is invalid. (and 1 more error)',
+            'message' => 'The start date must be the same as or before the end date. (and 2 more errors)',
             'errors' => [
                 'end' => [
                     'The end date is invalid.',
                     'The end date must be the same as or after the start date.'
+                ],
+                'start' => [
+                    'The start date must be the same as or before the end date.',
                 ],
             ],
         ]);
@@ -266,7 +308,7 @@ class CreateCalendarEventTest extends TestCase
         $this->assertDatabaseEmpty('calendar_events');
     }
 
-    public function test_end_is_after_or_equal_to_start()
+    public function test_end_must_be_after_or_equal_to_start()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
@@ -276,14 +318,43 @@ class CreateCalendarEventTest extends TestCase
             'title' => 'Test Calendar Event',
             'start' => '2021-01-01 00:00:00',
             'end' => '2020-01-01 00:00:00',
+            'all_day' => 0
         ]);
 
         $response->assertStatus(422);
         $response->assertExactJson([
-            'message' => 'The end date must be the same as or after the start date.',
+            'message' => 'The start date must be the same as or before the end date. (and 1 more error)',
             'errors' => [
                 'end' => [
                     'The end date must be the same as or after the start date.',
+                ],
+                'start' => [
+                    'The start date must be the same as or before the end date.',
+                ],
+            ],
+        ]);
+
+        $this->assertDatabaseEmpty('calendar_events');
+    }
+
+    public function test_all_day_is_required()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $calendar = Calendar::factory()->create();
+        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+            'title' => 'Test Calendar Event',
+            'start' => '2020-01-01 00:00:00',
+            'end' => '2021-01-01 00:00:00',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertExactJson([
+            'message' => 'The all day field is required.',
+            'errors' => [
+                'all_day' => [
+                    'The all day field is required.',
                 ],
             ],
         ]);

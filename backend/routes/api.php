@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('calendar-events')->group(function () {
         Route::prefix('{calendar_event}')->group(function () {
             Route::get('', [CalendarEventController::class, 'show'])->withTrashed();
+            Route::patch('restore', [CalendarEventController::class, 'restore'])->withTrashed();
             Route::delete('', [CalendarEventController::class, 'destroy']);
         });
     });

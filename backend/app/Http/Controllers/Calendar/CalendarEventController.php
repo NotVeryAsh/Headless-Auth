@@ -71,6 +71,22 @@ class CalendarEventController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @throws AuthorizationException
+     */
+    public function restore(CalendarEvent $calendarEvent): JsonResponse
+    {
+        $this->authorize('restore', $calendarEvent);
+
+        $calendarEvent->restore();
+
+        return response()->json([
+            'calendar_event' => new CalendarEventResource($calendarEvent->fresh()),
+        ], 200);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @throws AuthorizationException

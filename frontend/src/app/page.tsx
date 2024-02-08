@@ -11,7 +11,7 @@ export default function Home() {
         <Link href={"products"} className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
             Products Example
         </Link>
-        <Link href={"calendar"} className="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded">
+        <Link href={"calendars"} className="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded">
             Calendar Example
         </Link>
     </main>

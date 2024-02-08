@@ -73,11 +73,11 @@ async function loginUser(response: Response | undefined, name: string, errors: a
         return;
     }
 
-    if(response.status === 200 || response.status === 201) {
+    if(response.status >= 200 && response.status <= 299) {
 
         await storeAuthToken(data.token)
 
-        await redirectTo('dashboard')
+        await redirectTo('calendars')
     }
 }
 

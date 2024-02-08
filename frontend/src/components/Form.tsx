@@ -44,7 +44,7 @@ function Form({method, action, buttonText, formSubmitThen, children}: {method: s
 
     return (
         <form onSubmit={(event) => {handleSubmit(event, method, action, isSubmitting, setIsSubmitting).then(
-            (response) => formSubmitThen(response?.status, response?.json())
+            (response) => {formSubmitThen(response?.status, response?.json())}
         )}} action={action} method={method}>
             {children}
             <Button disabled={isSubmitting}>

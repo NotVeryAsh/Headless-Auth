@@ -5,9 +5,9 @@ import Button from "@/components/Button";
 import sendRequest from "@/lib/request";
 import storeAuthToken, {redirectTo} from "@/lib/auth";
 
-async function handleSubmit(event: any, method: string, action: string, isSubmitting: any, setIsSubmitting: any, errors: never[], setErrors: Dispatch<SetStateAction<never[]>>) {
+async function handleSubmit(event: any, method: string, action: string, isSubmitting: any, setIsSubmitting: any, errors: any, setErrors: any, name: string) {
 
-    setErrors([]);
+    setErrors([])
 
     // Don't proceed if form is currently submitting
     if(isSubmitting) {
@@ -29,7 +29,7 @@ async function handleSubmit(event: any, method: string, action: string, isSubmit
     // Allow the form to be submitted again
     setIsSubmitting(false);
 
-    return response;
+    return loginUser(response, name, errors, setErrors);
 }
 
 async function loginUser(response: Response | undefined, name: string, errors: any, setErrors: any) {
@@ -64,7 +64,6 @@ async function loginUser(response: Response | undefined, name: string, errors: a
         })
 
         setErrors([
-            ...errors,
             ...errorMessages
         ])
 
@@ -87,18 +86,19 @@ function AuthenticationForm({method, action, name="login", buttonText, children}
     const [errors, setErrors] = useState([])
 
     return (
-        <form onSubmit={(event) => {handleSubmit(event, method, action, isSubmitting, setIsSubmitting, errors, setErrors)
-            .then((response) => loginUser(response, name, errors, setErrors))}}
+        <form className={"flex flex-col w-full text-center"} onSubmit={(event) => {handleSubmit(event, method, action, isSubmitting, setIsSubmitting, errors, setErrors, name)}}
               action={action} method={method}>
             <ul id={name + "_form_errors"} className={"flex flex-col space-y-2 text-red-400"}>{errors.map((error, index) => (
                 <li key={index}>
                     {error}
                 </li>
             ))}</ul>
-            {children}
-            <Button disabled={isSubmitting}>
-                {buttonText ? buttonText : 'Submit'}
-            </Button>
+            <div className={"w-2/12 mx-auto"}>
+                {children}
+                <Button disabled={isSubmitting} classNames={"w-full my-2"}>
+                    {buttonText ? buttonText : 'Submit'}
+                </Button>
+            </div>
         </form>
     )
 }

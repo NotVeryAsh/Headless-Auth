@@ -14,9 +14,9 @@ class CalendarEventPolicy
      */
     public function viewAny(User $user, Calendar $calendar): Response
     {
-        return $user->id->toString() === $calendar->user_id ?
+        return $user->id === $calendar->user_id ?
             Response::allow() :
-            Response::denyWithStatus(404);
+            Response::deny();
     }
 
     /**
@@ -24,9 +24,9 @@ class CalendarEventPolicy
      */
     public function view(User $user, CalendarEvent $calendarEvent): Response
     {
-        return $user->id->toString() === $calendarEvent->calendar->user_id ?
+        return $user->id === $calendarEvent->calendar->user_id ?
             Response::allow() :
-            Response::denyWithStatus(404);
+            Response::deny();
     }
 
     /**
@@ -34,9 +34,9 @@ class CalendarEventPolicy
      */
     public function create(User $user, Calendar $calendar): Response
     {
-        return $user->id->toString() === $calendar->user_id ?
+        return $user->id === $calendar->user_id ?
             Response::allow() :
-            Response::denyWithStatus(404);
+            Response::deny();
     }
 
     /**
@@ -44,9 +44,9 @@ class CalendarEventPolicy
      */
     public function update(User $user, CalendarEvent $calendarEvent): Response
     {
-        return $user->id->toString() === $calendarEvent->calendar->user_id ?
+        return $user->id === $calendarEvent->calendar->user_id ?
             Response::allow() :
-            Response::denyWithStatus(404);
+            Response::deny();
     }
 
     /**
@@ -54,9 +54,9 @@ class CalendarEventPolicy
      */
     public function delete(User $user, CalendarEvent $calendarEvent): Response
     {
-        return $user->id->toString() === $calendarEvent->calendar->user_id ?
+        return $user->id === $calendarEvent->calendar->user_id ?
             Response::allow() :
-            Response::denyWithStatus(404);
+            Response::deny();
     }
 
     /**
@@ -64,9 +64,9 @@ class CalendarEventPolicy
      */
     public function restore(User $user, CalendarEvent $calendarEvent): Response
     {
-        return $user->id->toString() === $calendarEvent->calendar->user_id ?
+        return $user->id === $calendarEvent->calendar->user_id ?
             Response::allow() :
-            Response::denyWithStatus(404);
+            Response::deny();
     }
 
     /**

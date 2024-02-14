@@ -22,9 +22,9 @@ class CalendarPolicy
      */
     public function view(User $user, Calendar $calendar): Response
     {
-        return $user->id->toString() === $calendar->user_id ?
+        return $user->id === $calendar->user_id ?
             Response::allow() :
-            Response::denyWithStatus(404);
+            Response::deny();
     }
 
     /**
@@ -41,9 +41,9 @@ class CalendarPolicy
      */
     public function update(User $user, Calendar $calendar): Response
     {
-        return $user->id->toString() === $calendar->user_id ?
+        return $user->id === $calendar->user_id ?
             Response::allow() :
-            Response::denyWithStatus(404);
+            Response::deny();
     }
 
     /**
@@ -51,9 +51,9 @@ class CalendarPolicy
      */
     public function delete(User $user, Calendar $calendar): Response
     {
-        return $user->id->toString() === $calendar->user_id ?
+        return $user->id === $calendar->user_id ?
             Response::allow() :
-            Response::denyWithStatus(404);
+            Response::deny();
     }
 
     /**
@@ -61,9 +61,9 @@ class CalendarPolicy
      */
     public function restore(User $user, Calendar $calendar): Response
     {
-        return $user->id->toString() === $calendar->user_id ?
+        return $user->id === $calendar->user_id ?
             Response::allow() :
-            Response::denyWithStatus(404);
+            Response::deny();
     }
 
     /**

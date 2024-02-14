@@ -14,7 +14,7 @@ export default async function CalendarPage() {
     // TODO Color presets
     // TODO if a dark color is selected, change color to white
 
-    const response = await sendRequest('GET', '/api/calendars', null ,1);
+    const response = await sendRequest('GET', '/api/calendars');
 
     if(response.status !== 200) {
         throw new Error('Failed to fetch calendars');
@@ -29,7 +29,7 @@ export default async function CalendarPage() {
             <h1 className="text-6xl font-bold text-slate-900">Welcome Back, Ash</h1>
             <hr className="w-full h-1 bg-gray-200 rounded"></hr>
             <div className={"flex flex-col"}>
-            <p className="text-2xl text-slate-600">Your Calendars</p>
+                <p className="text-2xl text-slate-600">Your Calendars</p>
                 <CalendarList calendars={calendars} />
             </div>
         </div>

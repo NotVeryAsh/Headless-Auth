@@ -4,8 +4,8 @@ import React, {MouseEventHandler, ReactNode} from "react";
 
 export default function Button({disabled=false, children, onClick, classNames=""}: {disabled?: boolean, children?: ReactNode, onClick?: MouseEventHandler, classNames?: string}) {
 
-    const ClassNames = classNames + " bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded" +
-        (disabled ? " opacity-50 cursor-not-allowed" : "")
+    const ClassNames = classNames + " button" +
+        (disabled ? " button-disabled" : "")
 
     return (
         <button className={ClassNames} aria-disabled={disabled} onClick={onClick}>

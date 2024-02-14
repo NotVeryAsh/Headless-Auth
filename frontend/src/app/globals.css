@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    .button {
+        @apply bg-teal-400 hover:bg-teal-500 text-white py-2 px-4 rounded text-center shadow
+    }
+    .button-disabled {
+        @apply button opacity-50 cursor-not-allowed
+    }
+
+    .large-title {
+        @apply text-7xl
+    }
+
+    .input {
+        @apply w-full p-2 my-2 border border-gray-300 rounded
+    }
+}

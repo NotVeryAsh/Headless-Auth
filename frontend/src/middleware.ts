@@ -13,7 +13,7 @@ export default async function middleware(request: NextRequest) {
 
     // Check if user is trying to access dashboard page whilst logged in
     if ((isPage(request, '/login') || isPage(request, '/register')) && authenticated) {
-        return NextResponse.redirect(new URL('/dashboard', request.url))
+        return NextResponse.redirect(new URL('/calendars', request.url))
     }
 
     const pathName = request.nextUrl.pathname;

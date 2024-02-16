@@ -1,7 +1,7 @@
 'use client'
 
 import {ReactNode, useState} from "react";
-import Button from "@/components/Button";
+import PrimaryButton from "@/components/PrimaryButton";
 import sendRequest from "@/lib/request";
 
 /*
@@ -38,18 +38,20 @@ async function handleSubmit(event: any, method: string, action: string, isSubmit
     return response;
 }
 
-function Form({method, action, buttonText, formSubmitThen, children}: {method: string, action: string, buttonText?: string, formSubmitThen?: any, children?: ReactNode}) {
+function Form({method, action, buttonText, formSubmitThen, children, className, showSubmitButton=true}: {method: string, action: string, buttonText?: string, formSubmitThen?: any, className?: string, children?: ReactNode, showSubmitButton?: boolean}) {
 
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     return (
-        <form onSubmit={(event) => {handleSubmit(event, method, action, isSubmitting, setIsSubmitting).then(
+        <form className={className} onSubmit={(event) => {handleSubmit(event, method, action, isSubmitting, setIsSubmitting).then(
             (response) => {formSubmitThen(response?.status, response?.json())}
         )}} action={action} method={method}>
             {children}
-            <Button disabled={isSubmitting}>
-                {buttonText ? buttonText : 'Submit'}
-            </Button>
+            {showSubmitButton && (
+                <PrimaryButton className={"w-full"} disabled={isSubmitting}>
+                    {buttonText ? buttonText : 'Submit'}
+                </PrimaryButton>
+            )}
         </form>
     )
 }

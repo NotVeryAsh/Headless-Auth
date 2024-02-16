@@ -1,7 +1,7 @@
 'use client'
 
 import {Dispatch, ReactNode, SetStateAction, useState} from "react";
-import Button from "@/components/Button";
+import PrimaryButton from "@/components/PrimaryButton";
 import sendRequest from "@/lib/request";
 import storeAuthToken, {redirectTo} from "@/lib/auth";
 
@@ -95,9 +95,9 @@ function AuthenticationForm({method, action, name="login", buttonText, children}
             ))}</ul>
             <div className={"w-2/12 mx-auto"}>
                 {children}
-                <Button disabled={isSubmitting} classNames={"w-full my-2"}>
+                <PrimaryButton disabled={isSubmitting} className={"w-full my-2"}>
                     {buttonText ? buttonText : 'Submit'}
-                </Button>
+                </PrimaryButton>
             </div>
         </form>
     )

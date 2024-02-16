@@ -2,7 +2,7 @@
 
 import React from "react";
 import {useRouter} from 'next/navigation'
-import Button from "@/components/Button";
+import PrimaryButton from "@/components/PrimaryButton";
 import { usePathname } from 'next/navigation'
 
 export default function BackButton() {
@@ -31,6 +31,6 @@ export default function BackButton() {
     }
 
     return (
-        <Button onClick={() => router.push('/' + previousLocation)} classNames={"mr-auto"}>Back</Button>
+        <PrimaryButton onClick={() => router.push('/' + previousLocation)} className={"mr-auto"}>Back</PrimaryButton>
     );
 }

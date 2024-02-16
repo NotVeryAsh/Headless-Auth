@@ -1,6 +1,6 @@
 'use client'
 
-import Button from "@/components/Button";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default function Error({
   error,
@@ -12,7 +12,7 @@ export default function Error({
     return (
         <div>
             <h2>Failed to fetch calendar events!</h2>
-            <Button onClick={() => reset()}> Try again</Button>
+            <PrimaryButton onClick={() => reset()}> Try again</PrimaryButton>
         </div>
     )
 }

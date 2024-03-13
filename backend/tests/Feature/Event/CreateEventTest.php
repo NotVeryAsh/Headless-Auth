@@ -1,18 +1,18 @@
 <?php
 
-namespace Tests\Feature\CalendarEvent;
+namespace Tests\Feature\Event;
 
 use App\Models\Calendar;
-use App\Models\CalendarEvent;
+use App\Models\Event;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class CreateCalendarEventTest extends TestCase
+class CreateEventTest extends TestCase
 {
-    public function test_can_create_calendar_event()
+    public function test_can_create_event()
     {
         $user = User::factory()->create();
 
@@ -20,16 +20,16 @@ class CreateCalendarEventTest extends TestCase
 
         $calendar = Calendar::factory()->create();
 
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => 'Test Calendar Event',
             'all_day' => true,
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-01 00:00:00',
         ]);
 
-        $calendarEvent = CalendarEvent::query()->first();
+        $event = Event::query()->first();
 
-        $this->assertDatabaseHas('calendar_events', [
+        $this->assertDatabaseHas('events', [
             'title' => 'Test Calendar Event',
             'all_day' => 1,
             'start' => '2020-01-01 00:00:00',
@@ -38,8 +38,8 @@ class CreateCalendarEventTest extends TestCase
 
         $response->assertStatus(201);
         $response->assertExactJson([
-            'calendar_event' => [
-                'id' => $calendarEvent->id,
+            'event' => [
+                'id' => $event->id,
                 'title' => 'Test Calendar Event',
                 'all_day' => true,
                 'start' => '2020-01-01 00:00:00',
@@ -56,10 +56,10 @@ class CreateCalendarEventTest extends TestCase
         User::factory()->create();
         $calendar = Calendar::factory()->create();
 
-        $response = $this->postJson("/api/calendars/$calendar->id/calendar-events");
+        $response = $this->postJson("/api/calendars/$calendar->id/events");
         $response->assertStatus(404);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_404_returned_when_calendar_not_found()
@@ -67,13 +67,13 @@ class CreateCalendarEventTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->postJson('/api/calendars/test/calendar-events');
+        $response = $this->postJson('/api/calendars/test/events');
         $response->assertStatus(404);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
-    public function test_404_returned_when_user_does_not_have_permission()
+    public function test_403_returned_when_user_does_not_have_permission()
     {
         User::factory()->create();
         $userTwo = User::factory()->create();
@@ -82,16 +82,16 @@ class CreateCalendarEventTest extends TestCase
 
         $calendar = Calendar::factory()->create();
 
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => 'Test Calendar Event',
             'all_day' => true,
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
         ]);
 
-        $response->assertStatus(404);
+        $response->assertStatus(403);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_title_is_required()
@@ -100,10 +100,9 @@ class CreateCalendarEventTest extends TestCase
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 0,
         ]);
         $response->assertStatus(422);
         $response->assertExactJson([
@@ -115,7 +114,7 @@ class CreateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_title_must_be_a_string()
@@ -124,11 +123,10 @@ class CreateCalendarEventTest extends TestCase
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => 1,
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -141,7 +139,7 @@ class CreateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_title_must_not_be_greater_than_255_characters()
@@ -150,11 +148,10 @@ class CreateCalendarEventTest extends TestCase
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => Str::random(256),
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -167,7 +164,7 @@ class CreateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_start_is_required()
@@ -176,10 +173,9 @@ class CreateCalendarEventTest extends TestCase
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => 'Test Calendar Event',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -192,7 +188,7 @@ class CreateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_start_must_be_a_valid_date()
@@ -201,11 +197,10 @@ class CreateCalendarEventTest extends TestCase
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => 'Test Calendar Event',
             'start' => 'test',
             'end' => '2021-01-01 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -218,7 +213,7 @@ class CreateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_start_must_be_before_or_equal_to_start()
@@ -227,11 +222,10 @@ class CreateCalendarEventTest extends TestCase
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => 'Test Calendar Event',
             'start' => '2021-01-01 00:00:00',
             'end' => '2020-01-01 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -247,7 +241,7 @@ class CreateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_end_is_required()
@@ -256,10 +250,9 @@ class CreateCalendarEventTest extends TestCase
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -275,7 +268,7 @@ class CreateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_end_must_be_a_valid_date()
@@ -284,11 +277,10 @@ class CreateCalendarEventTest extends TestCase
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => 'Test Calendar Event',
             'end' => 'test',
             'start' => '2020-01-01 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -305,7 +297,7 @@ class CreateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_end_must_be_after_or_equal_to_start()
@@ -314,11 +306,10 @@ class CreateCalendarEventTest extends TestCase
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => 'Test Calendar Event',
             'start' => '2021-01-01 00:00:00',
             'end' => '2020-01-01 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -334,32 +325,7 @@ class CreateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseEmpty('calendar_events');
-    }
-
-    public function test_all_day_is_required()
-    {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
-        $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
-            'title' => 'Test Calendar Event',
-            'start' => '2020-01-01 00:00:00',
-            'end' => '2021-01-01 00:00:00',
-        ]);
-
-        $response->assertStatus(422);
-        $response->assertExactJson([
-            'message' => 'The all day field is required.',
-            'errors' => [
-                'all_day' => [
-                    'The all day field is required.',
-                ],
-            ],
-        ]);
-
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 
     public function test_all_day_must_be_a_boolean()
@@ -368,7 +334,7 @@ class CreateCalendarEventTest extends TestCase
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
-        $response = $this->postJson("api/calendars/$calendar->id/calendar-events", [
+        $response = $this->postJson("api/calendars/$calendar->id/events", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2021-01-01 00:00:00',
@@ -377,14 +343,14 @@ class CreateCalendarEventTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertExactJson([
-            'message' => 'The all day field must be true or false.',
+            'message' => 'The all day field must be accepted.',
             'errors' => [
                 'all_day' => [
-                    'The all day field must be true or false.',
+                    'The all day field must be accepted.',
                 ],
             ],
         ]);
 
-        $this->assertDatabaseEmpty('calendar_events');
+        $this->assertDatabaseEmpty('events');
     }
 }

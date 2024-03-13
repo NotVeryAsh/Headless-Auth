@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\CalendarEvent;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CalendarEventResource extends JsonResource
+class EventResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,7 @@ class CalendarEventResource extends JsonResource
     public function toArray(Request $request): array
     {
         /**
-         * @var $this CalendarEvent
+         * @var $this Event
          */
         return [
             'id' => $this->id,

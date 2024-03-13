@@ -1,17 +1,17 @@
 <?php
 
-namespace Tests\Feature\CalendarEvent;
+namespace Tests\Feature\Event;
 
 use App\Models\Calendar;
-use App\Models\CalendarEvent;
+use App\Models\Event;
 use App\Models\User;
 use Carbon\Carbon;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class GetCalendarEventTest extends TestCase
+class GetEventTest extends TestCase
 {
-    public function test_can_get_calendar_event()
+    public function test_can_get_event()
     {
         $user = User::factory()->create();
 
@@ -21,7 +21,7 @@ class GetCalendarEventTest extends TestCase
             'title' => 'Test Calendar',
         ]);
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'calendar_id' => $calendar->id,
             'title' => 'Test title',
             'all_day' => true,
@@ -29,17 +29,17 @@ class GetCalendarEventTest extends TestCase
             'end' => Carbon::tomorrow(),
         ]);
 
-        $response = $this->getJson("/api/calendar-events/$calendarEvent->id");
+        $response = $this->getJson("/api/events/$event->id");
 
         $response->assertStatus(200);
         $response->assertExactJson([
-            'calendar_event' => [
-                'id' => $calendarEvent->id,
-                'title' => $calendarEvent->title,
+            'event' => [
+                'id' => $event->id,
+                'title' => $event->title,
                 'all_day' => 1,
                 'start' => Carbon::now()->format('Y-m-d H:i:s'),
                 'end' => Carbon::tomorrow()->format('Y-m-d H:i:s'),
-                'calendar_id' => $calendarEvent->calendar_id,
+                'calendar_id' => $event->calendar_id,
                 'deleted_at' => null,
                 'created_at' => Carbon::now(),
             ],
@@ -56,26 +56,26 @@ class GetCalendarEventTest extends TestCase
             'title' => 'Test Calendar',
         ]);
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test title',
             'all_day' => false,
             'start' => Carbon::now(),
             'end' => Carbon::tomorrow(),
         ]);
 
-        $calendarEvent->delete();
+        $event->delete();
 
-        $response = $this->getJson("/api/calendar-events/$calendarEvent->id");
+        $response = $this->getJson("/api/events/$event->id");
 
         $response->assertStatus(200);
         $response->assertExactJson([
-            'calendar_event' => [
-                'id' => $calendarEvent->id,
-                'title' => $calendarEvent->title,
+            'event' => [
+                'id' => $event->id,
+                'title' => $event->title,
                 'all_day' => 0,
                 'start' => Carbon::now()->format('Y-m-d H:i:s'),
                 'end' => Carbon::tomorrow()->format('Y-m-d H:i:s'),
-                'calendar_id' => $calendarEvent->calendar_id,
+                'calendar_id' => $event->calendar_id,
                 'deleted_at' => Carbon::now(),
                 'created_at' => Carbon::now(),
             ],
@@ -90,18 +90,18 @@ class GetCalendarEventTest extends TestCase
             'title' => 'Test Calendar',
         ]);
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test title',
             'all_day' => false,
             'start' => Carbon::now(),
             'end' => Carbon::tomorrow(),
         ]);
 
-        $response = $this->getJson("/api/calendar-events/$calendarEvent->id");
+        $response = $this->getJson("/api/events/$event->id");
         $response->assertStatus(404);
     }
 
-    public function test_404_returned_when_user_does_not_have_permission()
+    public function test_403_returned_when_user_does_not_have_permission()
     {
         $user = User::factory()->create();
         $userTwo = User::factory()->create();
@@ -112,23 +112,23 @@ class GetCalendarEventTest extends TestCase
             'title' => 'Test Calendar',
         ]);
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test title',
             'all_day' => false,
             'start' => Carbon::now(),
             'end' => Carbon::tomorrow(),
         ]);
 
-        $response = $this->getJson("/api/calendar-events/$calendarEvent->id");
-        $response->assertStatus(404);
+        $response = $this->getJson("/api/events/$event->id");
+        $response->assertStatus(403);
     }
 
-    public function test_404_returned_when_calendar_event_not_found()
+    public function test_404_returned_when_event_not_found()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->getJson('/api/calendar-events/test');
+        $response = $this->getJson('/api/events/test');
         $response->assertStatus(404);
     }
 }

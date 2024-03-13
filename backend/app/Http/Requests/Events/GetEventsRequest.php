@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\CalendarEvents;
+namespace App\Http\Requests\Events;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetCalendarEventsRequest extends FormRequest
+class GetEventsRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.

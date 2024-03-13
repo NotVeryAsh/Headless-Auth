@@ -14,12 +14,10 @@ export default async function CalendarPage() {
     const calendars = json.calendars;
 
     return (
-        <div className="flex flex-col items-center justify-center space-y-10">
-            <h1 className="text-3xl text-slate-600">Recently Deleted Calendars</h1>
-            <hr className="w-full h-1 bg-gray-200 rounded"></hr>
-            <div className={"flex flex-col"}>
-                <CalendarList calendars={calendars} deleted={true} />
-            </div>
-        </div>
+      <div className={"flex flex-col mx-auto space-y-10 items-center w-full"}>
+        <h1 className="large-title">Welcome back, Ash</h1>
+        <hr className="w-8/12 h-1 bg-gray-200 rounded"></hr>
+        <CalendarList calendars={calendars} />
+      </div>
     );
 }

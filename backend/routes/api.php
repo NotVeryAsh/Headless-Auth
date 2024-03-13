@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Calendar\CalendarController;
-use App\Http\Controllers\Calendar\CalendarEventController;
+use App\Http\Controllers\Calendar\EventController;
 use App\Http\Controllers\User\GetCurrentUserController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,19 +19,19 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('', [CalendarController::class, 'destroy']);
             Route::patch('restore', [CalendarController::class, 'restore'])->withTrashed();
 
-            Route::prefix('calendar-events')->group(function () {
-                Route::get('', [CalendarEventController::class, 'index'])->withTrashed();
-                Route::post('', [CalendarEventController::class, 'store']);
+            Route::prefix('events')->group(function () {
+                Route::get('', [EventController::class, 'index'])->withTrashed();
+                Route::post('', [EventController::class, 'store']);
             });
         });
     });
 
-    Route::prefix('calendar-events')->group(function () {
-        Route::prefix('{calendar_event}')->group(function () {
-            Route::get('', [CalendarEventController::class, 'show'])->withTrashed();
-            Route::patch('', [CalendarEventController::class, 'update']);
-            Route::patch('restore', [CalendarEventController::class, 'restore'])->withTrashed();
-            Route::delete('', [CalendarEventController::class, 'destroy']);
+    Route::prefix('events')->group(function () {
+        Route::prefix('{event}')->group(function () {
+            Route::get('', [EventController::class, 'show'])->withTrashed();
+            Route::patch('', [EventController::class, 'update']);
+            Route::patch('restore', [EventController::class, 'restore'])->withTrashed();
+            Route::delete('', [EventController::class, 'destroy']);
         });
     });
 });

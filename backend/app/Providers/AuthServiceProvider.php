@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Calendar;
-use App\Models\CalendarEvent;
-use App\Policies\CalendarEventPolicy;
+use App\Models\Event;
+use App\Policies\EventPolicy;
 use App\Policies\CalendarPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -17,7 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Calendar::class => CalendarPolicy::class,
-        CalendarEvent::class => CalendarEventPolicy::class,
+        Event::class => EventPolicy::class,
     ];
 
     /**

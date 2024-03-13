@@ -27,3 +27,11 @@
         scrollbar-width: none
     }
 }
+
+.fc {
+    @apply flex-grow;
+}
+
+.fc-view-harness {
+    height: auto !important;
+}

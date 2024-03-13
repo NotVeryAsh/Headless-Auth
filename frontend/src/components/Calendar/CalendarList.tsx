@@ -2,7 +2,6 @@
 
 import React, {useState} from "react";
 
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Form from "@/components/Form";
 import Card from "@/components/Card";
 import PrimaryButton from "@/components/PrimaryButton";

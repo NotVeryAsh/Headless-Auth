@@ -1,24 +1,24 @@
 <?php
 
-namespace Tests\Feature\CalendarEvent;
+namespace Tests\Feature\Event;
 
 use App\Models\Calendar;
-use App\Models\CalendarEvent;
+use App\Models\Event;
 use App\Models\User;
 use Carbon\Carbon;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class GetCalendarEventsTest extends TestCase
+class GetEventsTest extends TestCase
 {
-    public function test_can_get_calendar_events()
+    public function test_can_get_events()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
 
-        $calendarEventOne = CalendarEvent::factory()->create([
+        $eventOne = Event::factory()->create([
             'title' => 'Test Calendar Event 1',
             'all_day' => 1,
             'start' => Carbon::yesterday(),
@@ -26,7 +26,7 @@ class GetCalendarEventsTest extends TestCase
         ]);
 
         // Test Calendar Event 2 should not be returned since it is trashed
-        $calendarEventTwo = CalendarEvent::factory()->create([
+        $eventTwo = Event::factory()->create([
             'title' => 'Test Calendar Event 2',
             'all_day' => 0,
             'start' => Carbon::now(),
@@ -34,18 +34,18 @@ class GetCalendarEventsTest extends TestCase
         ]);
 
         // Test Calendar Event 3 should not be returned since it is trashed
-        $calendarEventThree = CalendarEvent::factory()->create([
+        $eventThree = Event::factory()->create([
             'title' => 'Test Calendar Event 3',
         ]);
 
-        $calendarEventThree->delete();
+        $eventThree->delete();
 
-        $response = $this->getJson("/api/calendars/$calendar->id/calendar-events");
+        $response = $this->getJson("/api/calendars/$calendar->id/events");
 
         $response->assertExactJson([
-            'calendar_events' => [
+            'events' => [
                 [
-                    'id' => $calendarEventOne->id,
+                    'id' => $eventOne->id,
                     'title' => 'Test Calendar Event 1',
                     'all_day' => 1,
                     'start' => Carbon::yesterday()->format('Y-m-d H:i:s'),
@@ -55,7 +55,7 @@ class GetCalendarEventsTest extends TestCase
                     'created_at' => Carbon::now(),
                 ],
                 [
-                    'id' => $calendarEventTwo->id,
+                    'id' => $eventTwo->id,
                     'title' => 'Test Calendar Event 2',
                     'all_day' => 0,
                     'start' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -68,36 +68,36 @@ class GetCalendarEventsTest extends TestCase
         ]);
     }
 
-    public function test_can_get_trashed_calendar_events()
+    public function test_can_get_trashed_events()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
         $calendar = Calendar::factory()->create();
 
-        $calendarEventOne = CalendarEvent::factory()->create([
+        $eventOne = Event::factory()->create([
             'title' => 'Test Calendar Event 1',
             'all_day' => 1,
             'start' => Carbon::yesterday()->format('Y-m-d H:i:s'),
             'end' => Carbon::tomorrow()->format('Y-m-d H:i:s'),
         ]);
 
-        $calendarEventOne->delete();
+        $eventOne->delete();
 
         // Test Calendar Event 2 should not be returned since it is not trashed
-        CalendarEvent::factory()->create([
+        Event::factory()->create([
             'title' => 'Test Calendar Event 2',
             'all_day' => 0,
             'start' => Carbon::now(),
             'end' => Carbon::now(),
         ]);
 
-        $response = $this->getJson("/api/calendars/$calendar->id/calendar-events?trashed=1");
+        $response = $this->getJson("/api/calendars/$calendar->id/events?trashed=1");
 
         $response->assertExactJson([
-            'calendar_events' => [
+            'events' => [
                 [
-                    'id' => $calendarEventOne->id,
+                    'id' => $eventOne->id,
                     'title' => 'Test Calendar Event 1',
                     'all_day' => 1,
                     'start' => Carbon::yesterday()->format('Y-m-d H:i:s'),
@@ -117,7 +117,7 @@ class GetCalendarEventsTest extends TestCase
 
         $calendar = Calendar::factory()->create();
 
-        $response = $this->getJson("/api/calendars/$calendar->id/calendar-events?trashed=test");
+        $response = $this->getJson("/api/calendars/$calendar->id/events?trashed=test");
 
         $response->assertExactJson([
             'message' => 'The trashed field must be true or false.',
@@ -134,11 +134,11 @@ class GetCalendarEventsTest extends TestCase
         User::factory()->create();
         $calendar = Calendar::factory()->create();
 
-        $response = $this->getJson("/api/calendars/$calendar->id/calendar-events?trashed=1");
+        $response = $this->getJson("/api/calendars/$calendar->id/events?trashed=1");
         $response->assertStatus(404);
     }
 
-    public function test_404_returned_when_user_does_not_have_permission()
+    public function test_403_returned_when_user_does_not_have_permission()
     {
         $user = User::factory()->create();
         $userTwo = User::factory()->create();
@@ -149,8 +149,8 @@ class GetCalendarEventsTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        $response = $this->getJson("/api/calendars/$calendar->id/calendar-events");
-        $response->assertStatus(404);
+        $response = $this->getJson("/api/calendars/$calendar->id/events");
+        $response->assertStatus(403);
     }
 
     public function test_404_returned_when_calendar_not_found()
@@ -158,7 +158,7 @@ class GetCalendarEventsTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->getJson('/api/calendars/test/calendar-events');
+        $response = $this->getJson('/api/calendars/test/events');
         $response->assertStatus(404);
     }
 }

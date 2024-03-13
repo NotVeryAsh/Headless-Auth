@@ -33,17 +33,21 @@ async function handleSubmit(event: any, method: string, action: string, isSubmit
 
     const response = await sendRequest(method, action, data);
 
+    if(response.status >= 200 && response.status <= 299) {
+        event.target.reset();
+    }
+
     setIsSubmitting(false);
 
     return response;
 }
 
-function Form({method, action, buttonText, formSubmitThen, children, className, showSubmitButton=true}: {method: string, action: string, buttonText?: string, formSubmitThen?: any, className?: string, children?: ReactNode, showSubmitButton?: boolean}) {
+function Form({method, action, buttonText, formSubmitThen, children, className, onSubmit, showSubmitButton=true}: {method: string, action: string, buttonText?: string, formSubmitThen?: any, className?: string, children?: ReactNode, onSubmit?: any, showSubmitButton?: boolean}) {
 
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     return (
-        <form className={className} onSubmit={(event) => {handleSubmit(event, method, action, isSubmitting, setIsSubmitting).then(
+        <form className={className} onSubmit={(event) => {if(onSubmit) { onSubmit(); } handleSubmit(event, method, action, isSubmitting, setIsSubmitting).then(
             (response) => {formSubmitThen(response?.status, response?.json())}
         )}} action={action} method={method}>
             {children}

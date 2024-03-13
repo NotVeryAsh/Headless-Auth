@@ -1,32 +1,31 @@
 <?php
 
-namespace Tests\Feature\CalendarEvent;
+namespace Tests\Feature\Event;
 
 use App\Models\Calendar;
-use App\Models\CalendarEvent;
+use App\Models\Event;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class UpdateCalendarEventTest extends TestCase
+class UpdateEventTest extends TestCase
 {
-    public function test_can_update_calendar_event()
+    public function test_can_update_event()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("api/events/$event->id", [
             'title' => 'Updated Calendar Event',
             'start' => '2021-01-01 00:00:00',
             'end' => '2022-01-01 00:00:00',
@@ -35,20 +34,20 @@ class UpdateCalendarEventTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertExactJson([
-            'calendar_event' => [
-                'id' => $calendarEvent->id,
+            'event' => [
+                'id' => $event->id,
                 'title' => 'Updated Calendar Event',
                 'all_day' => 1,
                 'start' => '2021-01-01 00:00:00',
                 'end' => '2022-01-01 00:00:00',
-                'calendar_id' => $calendarEvent->calendar_id,
+                'calendar_id' => $event->calendar_id,
                 'deleted_at' => null,
                 'created_at' => Carbon::now(),
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Updated Calendar Event',
             'all_day' => 1,
             'start' => '2021-01-01 00:00:00',
@@ -62,52 +61,48 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id");
+        $response = $this->patchJson("/api/events/$event->id");
         $response->assertStatus(404);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
-    public function test_404_returned_when_calendar_event_not_found()
+    public function test_404_returned_when_event_not_found()
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson('/api/calendar-events/test');
+        $response = $this->patchJson('/api/events/test');
         $response->assertStatus(404);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
-    public function test_404_returned_when_user_does_not_have_permission()
+    public function test_403_returned_when_user_does_not_have_permission()
     {
         $user = User::factory()->create();
         $userTwo = User::factory()->create();
@@ -116,25 +111,23 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => 'Updated Calendar Event',
         ]);
 
-        $response->assertStatus(404);
+        $response->assertStatus(403);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -145,18 +138,16 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => '',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -169,12 +160,11 @@ class UpdateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -185,18 +175,16 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => 0,
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -209,12 +197,11 @@ class UpdateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -225,18 +212,16 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => Str::random(256),
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -249,12 +234,11 @@ class UpdateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -265,18 +249,16 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => 'Test Calendar Event',
             'start' => '',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -289,12 +271,11 @@ class UpdateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -305,18 +286,16 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => 'Test Calendar Event',
             'start' => 'test',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -329,12 +308,11 @@ class UpdateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -345,18 +323,16 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => 'Test Calendar Event',
             'start' => '2021-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -372,12 +348,11 @@ class UpdateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -388,18 +363,16 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '',
-            'all_day' => 0,
         ]);
         $response->assertStatus(422);
         $response->assertExactJson([
@@ -414,12 +387,11 @@ class UpdateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -430,18 +402,17 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
+
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => 'test',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -458,12 +429,11 @@ class UpdateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -474,18 +444,16 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2019-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
         $response->assertStatus(422);
@@ -501,12 +469,11 @@ class UpdateCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -517,14 +484,13 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
@@ -533,20 +499,19 @@ class UpdateCalendarEventTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertExactJson([
-            'message' => 'The all day field is required.',
+            'message' => 'The all day field must be accepted.',
             'errors' => [
                 'all_day' => [
-                    'The all day field is required.',
+                    'The all day field must be accepted.',
                 ],
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 
@@ -557,14 +522,13 @@ class UpdateCalendarEventTest extends TestCase
 
         Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
 
-        $response = $this->patchJson("/api/calendar-events/$calendarEvent->id", [
+        $response = $this->patchJson("/api/events/$event->id", [
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
@@ -573,20 +537,19 @@ class UpdateCalendarEventTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertExactJson([
-            'message' => 'The all day field must be true or false.',
+            'message' => 'The all day field must be accepted.',
             'errors' => [
                 'all_day' => [
-                    'The all day field must be true or false.',
+                    'The all day field must be accepted.',
                 ],
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'title' => 'Test Calendar Event',
             'start' => '2020-01-01 00:00:00',
             'end' => '2020-01-02 00:00:00',
-            'all_day' => 0,
         ]);
     }
 }

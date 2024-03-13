@@ -1,17 +1,17 @@
 <?php
 
-namespace CalendarEvent;
+namespace Event;
 
 use App\Models\Calendar;
-use App\Models\CalendarEvent;
+use App\Models\Event;
 use App\Models\User;
 use Carbon\Carbon;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class DestroyCalendarEventTest extends TestCase
+class DestroyEventTest extends TestCase
 {
-    public function test_can_destroy_calendar_event()
+    public function test_can_destroy_event()
     {
         $user = User::factory()->create();
 
@@ -19,7 +19,7 @@ class DestroyCalendarEventTest extends TestCase
 
         $calendar = Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'all_day' => true,
             'start' => Carbon::today(),
@@ -27,13 +27,13 @@ class DestroyCalendarEventTest extends TestCase
             'calendar_id' => $calendar->id,
         ]);
 
-        $response = $this->deleteJson("/api/calendar-events/$calendarEvent->id");
+        $response = $this->deleteJson("/api/events/$event->id");
 
         $response->assertStatus(200);
 
         $response->assertExactJson([
-            'calendar_events' => [
-                'id' => $calendarEvent->id,
+            'event' => [
+                'id' => $event->id,
                 'title' => 'Test Calendar Event',
                 'all_day' => 1,
                 'start' => Carbon::today()->format('Y-m-d H:i:s'),
@@ -44,8 +44,8 @@ class DestroyCalendarEventTest extends TestCase
             ],
         ]);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'deleted_at' => Carbon::now(),
         ]);
     }
@@ -56,7 +56,7 @@ class DestroyCalendarEventTest extends TestCase
 
         $calendar = Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'all_day' => true,
             'start' => Carbon::today(),
@@ -64,16 +64,16 @@ class DestroyCalendarEventTest extends TestCase
             'calendar_id' => $calendar->id,
         ]);
 
-        $response = $this->deleteJson("/api/calendar-events/$calendarEvent->id");
+        $response = $this->deleteJson("/api/events/$event->id");
         $response->assertStatus(404);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'deleted_at' => null,
         ]);
     }
 
-    public function test_404_returned_when_user_does_not_have_permission()
+    public function test_403_returned_when_user_does_not_have_permission()
     {
         User::factory()->create();
         $userTwo = User::factory()->create();
@@ -82,7 +82,7 @@ class DestroyCalendarEventTest extends TestCase
 
         $calendar = Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'all_day' => true,
             'start' => Carbon::today(),
@@ -90,11 +90,11 @@ class DestroyCalendarEventTest extends TestCase
             'calendar_id' => $calendar->id,
         ]);
 
-        $response = $this->deleteJson("/api/calendar-events/$calendarEvent->id");
-        $response->assertStatus(404);
+        $response = $this->deleteJson("/api/events/$event->id");
+        $response->assertStatus(403);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'deleted_at' => null,
         ]);
     }
@@ -106,7 +106,7 @@ class DestroyCalendarEventTest extends TestCase
 
         $calendar = Calendar::factory()->create();
 
-        $calendarEvent = CalendarEvent::factory()->create([
+        $event = Event::factory()->create([
             'title' => 'Test Calendar Event',
             'all_day' => true,
             'start' => Carbon::today(),
@@ -114,11 +114,11 @@ class DestroyCalendarEventTest extends TestCase
             'calendar_id' => $calendar->id,
         ]);
 
-        $response = $this->deleteJson('/api/calendar-events/test');
+        $response = $this->deleteJson('/api/events/test');
         $response->assertStatus(404);
 
-        $this->assertDatabaseHas('calendar_events', [
-            'id' => $calendarEvent->id,
+        $this->assertDatabaseHas('events', [
+            'id' => $event->id,
             'deleted_at' => null,
         ]);
     }

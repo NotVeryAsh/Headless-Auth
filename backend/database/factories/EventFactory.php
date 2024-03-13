@@ -6,9 +6,9 @@ use App\Models\Calendar;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CalendarEvent>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
  */
-class CalendarEventFactory extends Factory
+class EventFactory extends Factory
 {
     /**
      * Define the model's default state.

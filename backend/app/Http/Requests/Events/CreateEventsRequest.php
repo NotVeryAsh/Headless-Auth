@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\CalendarEvents;
+namespace App\Http\Requests\Events;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCalendarEventsRequest extends FormRequest
+class CreateEventsRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,27 +15,23 @@ class UpdateCalendarEventsRequest extends FormRequest
     {
         return [
             'title' => [
-                'sometimes',
                 'required',
                 'string',
                 'max:255',
             ],
             'start' => [
-                'sometimes',
                 'required',
                 'date',
                 'before_or_equal:end',
             ],
             'end' => [
-                'sometimes',
                 'required',
                 'date',
                 'after_or_equal:start',
             ],
             'all_day' => [
                 'sometimes',
-                'required',
-                'boolean',
+                'accepted',
             ],
         ];
     }

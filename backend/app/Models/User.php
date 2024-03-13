@@ -42,7 +42,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  *
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CalendarEvent> $calendarEvents
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $calendarEvents
  * @property-read int|null $calendar_events_count
  *
  * @method static Builder|User whereDuring($start, $end)
@@ -90,15 +90,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    public static function booted(): void
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->id = Str::uuid();
-        });
-    }
 
     public function calendars(): HasMany
     {

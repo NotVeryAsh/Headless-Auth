@@ -78,7 +78,7 @@ class RestoreCalendarTest extends TestCase
         ]);
     }
 
-    public function test_404_returned_when_user_does_not_have_permission()
+    public function test_403_returned_when_user_does_not_have_permission()
     {
         User::factory()->create();
         $userTwo = User::factory()->create();
@@ -92,7 +92,7 @@ class RestoreCalendarTest extends TestCase
         $calendar->delete();
 
         $response = $this->patchJson("/api/calendars/$calendar->id/restore");
-        $response->assertStatus(404);
+        $response->assertStatus(403);
 
         $this->assertDatabaseHas('calendars', [
             'id' => $calendar->id,

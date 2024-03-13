@@ -75,7 +75,7 @@ class UpdateCalendarTest extends TestCase
         ]);
     }
 
-    public function test_404_returned_when_user_does_not_have_permission()
+    public function test_403_returned_when_user_does_not_have_permission()
     {
         $user = User::factory()->create();
         $userTwo = User::factory()->create();
@@ -90,7 +90,7 @@ class UpdateCalendarTest extends TestCase
             'title' => 'Updated Calendar',
         ]);
 
-        $response->assertStatus(404);
+        $response->assertStatus(403);
 
         $this->assertDatabaseHas('calendars', [
             'id' => $calendar->id,

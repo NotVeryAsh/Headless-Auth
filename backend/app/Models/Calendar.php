@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\Calendar
  *
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CalendarEvent> $calendarEvents
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $calendarEvents
  * @property-read int|null $calendar_events_count
  * @property-read \App\Models\User|null $user
  *
@@ -39,9 +39,9 @@ class Calendar extends Model
         'user_id',
     ];
 
-    public function calendarEvents(): HasMany
+    public function events(): HasMany
     {
-        return $this->hasMany(CalendarEvent::class);
+        return $this->hasMany(Event::class);
     }
 
     public function user(): BelongsTo

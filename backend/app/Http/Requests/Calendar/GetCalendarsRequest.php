@@ -16,8 +16,8 @@ class GetCalendarsRequest extends FormRequest
         return [
             'trashed' => [
                 'nullable',
-                'boolean'
-            ]
+                'boolean',
+            ],
         ];
     }
 }

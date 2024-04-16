@@ -22,14 +22,14 @@ export default async function RootLayout(props: {
 
   return (
     <html lang="en">
-      <body className={montserrat.className + " flex min-h-screen flex-col items-center justify-between px-24 mt-10 bg-slate-100"}>
-        <main className="flex flex-col items-center justify-center space-y-10 w-full">
+      <body className={montserrat.className + " flex flex-col h-screen py-14 px-7 md:px-14 text-zinc-800"}>
           <div className={"flex flex-row w-full"}>
             <BackButton />
             <Logout/>
           </div>
-          {props.children}
-        </main>
+          <main className="flex h-full">
+            {props.children}
+          </main>
       </body>
     </html>
   )

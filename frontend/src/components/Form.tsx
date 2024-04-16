@@ -1,7 +1,7 @@
 'use client'
 
 import {ReactNode, useState} from "react";
-import Button from "@/components/Button";
+import PrimaryButton from "@/components/PrimaryButton";
 import sendRequest from "@/lib/request";
 
 /*
@@ -33,23 +33,29 @@ async function handleSubmit(event: any, method: string, action: string, isSubmit
 
     const response = await sendRequest(method, action, data);
 
+    if(response.status >= 200 && response.status <= 299) {
+        event.target.reset();
+    }
+
     setIsSubmitting(false);
 
     return response;
 }
 
-function Form({method, action, buttonText, formSubmitThen, children}: {method: string, action: string, buttonText?: string, formSubmitThen?: any, children?: ReactNode}) {
+function Form({method, action, buttonText, formSubmitThen, children, className, onSubmit, showSubmitButton=true}: {method: string, action: string, buttonText?: string, formSubmitThen?: any, className?: string, children?: ReactNode, onSubmit?: any, showSubmitButton?: boolean}) {
 
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     return (
-        <form onSubmit={(event) => {handleSubmit(event, method, action, isSubmitting, setIsSubmitting).then(
-            (response) => formSubmitThen(response?.status, response?.json())
+        <form className={className} onSubmit={(event) => {if(onSubmit) { onSubmit(); } handleSubmit(event, method, action, isSubmitting, setIsSubmitting).then(
+            (response) => {formSubmitThen(response?.status, response?.json())}
         )}} action={action} method={method}>
             {children}
-            <Button disabled={isSubmitting}>
-                {buttonText ? buttonText : 'Submit'}
-            </Button>
+            {showSubmitButton && (
+                <PrimaryButton className={"w-full"} disabled={isSubmitting}>
+                    {buttonText ? buttonText : 'Submit'}
+                </PrimaryButton>
+            )}
         </form>
     )
 }

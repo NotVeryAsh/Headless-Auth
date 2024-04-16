@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  frontend:
+    build:
+      dockerfile: docker/Dockerfile
+    image: with-docker-multi-env-production
+    ports:
+      - "3003:3000"

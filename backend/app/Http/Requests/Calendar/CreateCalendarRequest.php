@@ -17,17 +17,17 @@ class CreateCalendarRequest extends FormRequest
             'title' => [
                 'required',
                 'string',
-                'max:255'
-            ]
+                'max:255',
+            ],
         ];
     }
 
-    function messages(): array
+    public function messages(): array
     {
         return [
             'title.string' => 'The title is invalid.',
             'title.max' => 'The title must not be more than 255 characters long.',
-            'title.required' => 'The title is required.'
+            'title.required' => 'The title is required.',
         ];
     }
 }

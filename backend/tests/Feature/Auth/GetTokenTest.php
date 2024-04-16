@@ -4,8 +4,6 @@ namespace Auth;
 
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -15,7 +13,7 @@ class GetTokenTest extends TestCase
     {
         $user = User::factory()->create([
             'name' => 'Test user',
-            'email' => 'test@test.com'
+            'email' => 'test@test.com',
         ]);
 
         // Create a token for the user
@@ -35,9 +33,9 @@ class GetTokenTest extends TestCase
                 'name' => 'Test user',
                 'email' => 'test@test.com',
                 'created_at' => Carbon::now(),
-                'email_verified_at' => Carbon::now()
+                'email_verified_at' => Carbon::now(),
             ],
-            'token' => $response['token']
+            'token' => $response['token'],
         ]);
 
         // Assert old token has been deleted
@@ -45,7 +43,7 @@ class GetTokenTest extends TestCase
             'tokenable_id' => $user->id,
             'tokenable_type' => User::class,
             'name' => 'test_token',
-            'token' => $token
+            'token' => $token,
         ]);
     }
 

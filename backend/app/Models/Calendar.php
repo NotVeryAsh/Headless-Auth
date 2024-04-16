@@ -12,13 +12,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\Calendar
  *
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CalendarEvent> $calendarEvents
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $calendarEvents
  * @property-read int|null $calendar_events_count
  * @property-read \App\Models\User|null $user
+ *
  * @method static \Database\Factories\CalendarFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Calendar newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Calendar newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Calendar query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Calendar onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Calendar withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Calendar withoutTrashed()
+ *
  * @mixin \Eloquent
  */
 class Calendar extends Model
@@ -31,12 +36,12 @@ class Calendar extends Model
 
     protected $fillable = [
         'title',
-        'user_id'
+        'user_id',
     ];
 
-    public function calendarEvents(): HasMany
+    public function events(): HasMany
     {
-        return $this->hasMany(CalendarEvent::class);
+        return $this->hasMany(Event::class);
     }
 
     public function user(): BelongsTo

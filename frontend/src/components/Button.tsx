@@ -2,13 +2,13 @@
 
 import React, {MouseEventHandler, ReactNode} from "react";
 
-export default function Button({disabled=false, children, onClick, classNames=""}: {disabled?: boolean, children?: ReactNode, onClick?: MouseEventHandler, classNames?: string}) {
+export default function Button({type="submit", disabled=false, children, onClick, className=""}: {type?: any, disabled?: boolean, children?: ReactNode, onClick?: MouseEventHandler, className?: string}) {
 
-    const ClassNames = classNames + " bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" +
-        (disabled ? " opacity-50 cursor-not-allowed" : "")
+    className = className +
+        (disabled ? " button-disabled " : "")
 
     return (
-        <button className={ClassNames} aria-disabled={disabled} onClick={onClick}>
+        <button className={className} aria-disabled={disabled} onClick={onClick} type={type}>
             {children}
         </button>
     );

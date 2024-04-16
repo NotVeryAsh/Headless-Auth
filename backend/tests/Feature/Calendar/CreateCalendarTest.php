@@ -5,8 +5,6 @@ namespace Tests\Feature\Calendar;
 use App\Models\Calendar;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -20,11 +18,11 @@ class CreateCalendarTest extends TestCase
         Sanctum::actingAs($user);
 
         $response = $this->postJson('api/calendars', [
-            'title' => 'Test Calendar'
+            'title' => 'Test Calendar',
         ]);
 
         $this->assertDatabaseHas('calendars', [
-            'title' => 'Test Calendar'
+            'title' => 'Test Calendar',
         ]);
 
         $calendar = Calendar::query()->first();
@@ -37,13 +35,13 @@ class CreateCalendarTest extends TestCase
                 'user_id' => $user->id,
                 'created_at' => Carbon::now(),
                 'deleted_at' => null,
-            ]
+            ],
         ]);
     }
 
     public function test_404_returned_when_user_not_logged_in()
     {
-        $response = $this->postJson("/api/calendars");
+        $response = $this->postJson('/api/calendars');
         $response->assertStatus(404);
 
         $this->assertDatabaseEmpty('calendars');
@@ -54,15 +52,15 @@ class CreateCalendarTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->postJson("/api/calendars");
+        $response = $this->postJson('/api/calendars');
         $response->assertStatus(422);
         $response->assertExactJson([
             'message' => 'The title is required.',
             'errors' => [
                 'title' => [
-                    'The title is required.'
-                ]
-            ]
+                    'The title is required.',
+                ],
+            ],
         ]);
 
         $this->assertDatabaseEmpty('calendars');
@@ -73,8 +71,8 @@ class CreateCalendarTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->postJson("/api/calendars", [
-            'title' => 1
+        $response = $this->postJson('/api/calendars', [
+            'title' => 1,
         ]);
 
         $response->assertStatus(422);
@@ -82,9 +80,9 @@ class CreateCalendarTest extends TestCase
             'message' => 'The title is invalid.',
             'errors' => [
                 'title' => [
-                    'The title is invalid.'
-                ]
-            ]
+                    'The title is invalid.',
+                ],
+            ],
         ]);
 
         $this->assertDatabaseEmpty('calendars');
@@ -95,8 +93,8 @@ class CreateCalendarTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->postJson("/api/calendars", [
-            'title' => Str::random(256)
+        $response = $this->postJson('/api/calendars', [
+            'title' => Str::random(256),
         ]);
 
         $response->assertStatus(422);
@@ -104,9 +102,9 @@ class CreateCalendarTest extends TestCase
             'message' => 'The title must not be more than 255 characters long.',
             'errors' => [
                 'title' => [
-                    'The title must not be more than 255 characters long.'
-                ]
-            ]
+                    'The title must not be more than 255 characters long.',
+                ],
+            ],
         ]);
 
         $this->assertDatabaseEmpty('calendars');

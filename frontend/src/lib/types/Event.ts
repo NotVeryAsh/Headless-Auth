@@ -1,4 +1,4 @@
-interface CalendarEvent {
+interface Event {
     id: number,
     title: string,
     allDay?: boolean,

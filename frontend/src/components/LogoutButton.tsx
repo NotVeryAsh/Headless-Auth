@@ -1,7 +1,7 @@
 "use client"
 
 import React, {useState} from "react";
-import Button from "@/components/Button";
+import PrimaryButton from "@/components/PrimaryButton";
 import { usePathname } from 'next/navigation'
 import {deleteAuthToken, getAuthToken, redirectTo} from "@/lib/auth";
 import sendRequest from "@/lib/request";
@@ -51,7 +51,7 @@ export default function LogoutButton() {
     }
 
     return (
-        <Button disabled={isSubmitting} onClick={(event) => {handleClick(event, isSubmitting, setIsSubmitting)
-            .then((response) => logoutUser(response))}} classNames={"ml-auto"}>Log Out</Button>
+        <PrimaryButton disabled={isSubmitting} onClick={(event) => {handleClick(event, isSubmitting, setIsSubmitting)
+            .then((response) => logoutUser(response))}} className={"ml-auto"}>Log Out</PrimaryButton>
     );
 }

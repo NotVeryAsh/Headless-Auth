@@ -1,7 +1,7 @@
 import sendRequest from "@/lib/request";
 import React from "react";
 import CalendarList from "@/components/Calendar/CalendarList";
-export default async function CalendarPage() {
+export default async function DeletedCalendarPage() {
 
     const response = await sendRequest('GET', '/api/calendars?trashed=1');
 
@@ -14,10 +14,10 @@ export default async function CalendarPage() {
     const calendars = json.calendars;
 
     return (
-      <div className={"flex flex-col mx-auto space-y-10 items-center w-full"}>
+      <div className={"title-text"}>
         <h1 className="large-title">Welcome back, Ash</h1>
-        <hr className="w-8/12 h-1 bg-gray-200 rounded"></hr>
-        <CalendarList calendars={calendars} />
+        <hr className="w-10/12 md:w-8/12  h-1 bg-gray-200 rounded"></hr>
+        <CalendarList calendars={calendars} deleted={true} />
       </div>
     );
 }

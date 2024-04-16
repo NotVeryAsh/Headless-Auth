@@ -8,7 +8,7 @@ export default function Modal({isOpen=false, onCloseButtonClicked, onConfirmButt
 
     return (
       <div className={isOpen ? "fixed inset-0 bg-opacity-50 z-10 bg-gray-500 flex": 'hidden'} >
-        <Card title={title} className={"m-auto w-2/12"}>
+        <Card title={title} className={"m-auto w-10/12 md:w-2/12"}>
           {(formAction ?
             <Form method={formMethod} action={formAction} showSubmitButton={false} formSubmitThen={formSubmitThen} onSubmit={onSubmit}>
               {ModalContent(setIsOpen, onCloseButtonClicked, onConfirmButtonClicked, submitButtonText, closeButtonText, children)}
@@ -28,7 +28,7 @@ function ModalContent(setIsOpen: any, onCloseButtonClicked?: any, onConfirmButto
     <>
       {children}
       <div className={"flex flex-row space-x-5 my-auto"}>
-        <PrimaryButton type={"button"} onClick={(event) => {handleConfirmButtonClicked(setIsOpen); onConfirmButtonClicked();}}>
+        <PrimaryButton type={"button"} onClick={(event) => {handleConfirmButtonClicked(setIsOpen); onConfirmButtonClicked && onConfirmButtonClicked();}}>
           {submitButtonText ?? 'Confirm' }
         </PrimaryButton>
         <DangerButton type={"button"} onClick={(event) => {event.preventDefault();  handleCloseButtonClicked(setIsOpen); { onCloseButtonClicked && onCloseButtonClicked() }}}>

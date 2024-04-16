@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -24,6 +24,8 @@ export default function CalendarBlock({calendarId}: {calendarId: any}) {
   const [formErrors, setFormErrors] = useState([])
   const [selectedEvent, setSelectedEvent] = useState({})
   const [showEventModal, setShowEventModal] = useState(false)
+  const [showMobileView, setShowMobileView] = useState(window.innerWidth < 768)
+  const calendarRef = useRef(null)
 
   const getEvents = async (calendarId: number) => {
     const response = await sendRequest('GET', `/api/calendars/${calendarId}/events`);
@@ -121,6 +123,13 @@ export default function CalendarBlock({calendarId}: {calendarId: any}) {
     setEvents(updatedEvents)
   }
 
+  const handleWindowResize = (arg) => {
+    const mobileView = window.innerWidth < 768
+    setShowMobileView(mobileView)
+
+    calendarRef.current.getApi().changeView(mobileView ? 'timeGridDay' : 'timeGridWeek')
+  }
+
   const handleDeleteEvent = async (eventToDelete) => {
     const response = await sendRequest('DELETE', `/api/events/${eventToDelete.id}`);
 
@@ -171,6 +180,7 @@ export default function CalendarBlock({calendarId}: {calendarId: any}) {
           <PrimaryButton className={"ml-auto"} onClick={() => (setShowCreateEventModal(true))}>Create Event</PrimaryButton>
         </div>
         <FullCalendar
+          ref={calendarRef}
           events={events}
           plugins={[
             dayGridPlugin,
@@ -178,22 +188,22 @@ export default function CalendarBlock({calendarId}: {calendarId: any}) {
             timeGridPlugin
           ]}
           headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek'
+            left: showMobileView ? 'prev,next today' : 'prev,next today',
+            center: showMobileView ? '' : 'title',
+            right: showMobileView ? 'title' : 'timeGridDay,timeGridWeek,dayGridMonth'
           }}
-          initialView='timeGridWeek'
+          initialView={showMobileView ? 'timeGridDay' : 'timeGridWeek'}
           nowIndicator={true}
           editable={true}
           eventDurationEditable={true}
           eventResizableFromStart={true}
           selectable={true}
           selectMirror={true}
-          schedulerLicenseKey={'CC-Attribution-NonCommercial-NoDerivatives'}
           allDaySlot={false}
           eventClick={handleEventClick}
           eventDrop={handleEventResizeAndDrop}
           eventResize={handleEventResizeAndDrop}
+          windowResize={handleWindowResize}
           select={handleDateTimeSelected}
         />
       </div>

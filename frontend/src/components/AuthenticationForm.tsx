@@ -93,7 +93,7 @@ function AuthenticationForm({method, action, name="login", buttonText, children}
                     {error}
                 </li>
             ))}</ul>
-            <div className={"w-2/12 mx-auto"}>
+            <div className={"w-10/12 md:w-2/12 mx-auto"}>
                 {children}
                 <PrimaryButton disabled={isSubmitting} className={"w-full my-2"}>
                     {buttonText ? buttonText : 'Submit'}

@@ -10,9 +10,9 @@ function Login() {
     // TODO Any of the components that require state such as input should be Client Components and use the 'use client' directive
 
     return (
-        <div className={"flex flex-col mx-auto space-y-10 items-center w-full"}>
+        <div className={"title-text"}>
             <h1 className="large-title">Login</h1>
-            <hr className="w-3/12 h-1 bg-gray-200 rounded"></hr>
+            <hr className="title-hr"></hr>
             <AuthenticationForm method={"POST"} action={"/api/auth/login"} buttonText={"Login"}>
                 <input required={true} type="email" name="email" placeholder="Email" className="input" maxLength={255} />
                 <input required={true} type="password" name="password" placeholder="Password" className="input" />

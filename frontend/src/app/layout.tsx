@@ -9,6 +9,7 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false
 
+export const dynamic = "force-dynamic";
 const montserrat = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {

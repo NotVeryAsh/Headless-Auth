@@ -62,7 +62,7 @@ export default function CalendarBlock({calendarId}: {calendarId: any}) {
       return;
     }
 
-    if(selectedEvent) {
+    if(Object.keys(selectedEvent).length > 0) {
 
       const updatedEvents = events.map((event) => {
         if (event.id === data.event.id) {
@@ -81,7 +81,6 @@ export default function CalendarBlock({calendarId}: {calendarId: any}) {
     }
 
     setEvents([...events, data.event])
-    setShowCreateEventModal(false)
   }
 
   const handleEventClick = (event: any) => {
@@ -214,9 +213,9 @@ export default function CalendarBlock({calendarId}: {calendarId: any}) {
 function CreateEventModal({calendarId, handleResponse, setShowCreateEventModal, showCreateEventModal, setFormErrors, formErrors, defaultValues, setDefaultValues}, {})
 {
   return (
-    <Modal title={"Create new Event"} formMethod={"POST"} formAction={`/api/calendars/${calendarId}/events`}
+    <Modal title={"Create New Event"} formMethod={"POST"} formAction={`/api/calendars/${calendarId}/events`}
            formSubmitThen={(status: any, response: any) => {handleResponse(status, response)}} isOpen={showCreateEventModal}
-           setIsOpen={setShowCreateEventModal} onSubmit={() => {setFormErrors([])}}>
+           setIsOpen={setShowCreateEventModal} onSubmit={() => {setFormErrors([])}} submitButtonType={"submit"}>
       <ul id={"form_errors"} className={"flex flex-col space-y-2 text-red-400"}>{formErrors.map((error, index) => (
         <li key={index}>
           {error}

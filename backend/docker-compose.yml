@@ -1,3 +1,4 @@
+name: headless-auth
 services:
     laravel.test:
         build:
